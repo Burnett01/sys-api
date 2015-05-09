@@ -1,0 +1,27 @@
+{
+  "name": "sys-api",
+  "version": "0.0.1",
+  "bugs": {
+    "url": "https://github.com/Burnett01/sys-api/issues"
+  },
+  "description": "",
+  "keywords": [
+    "api",
+    "system",
+    "coffescript"
+  ],
+  "author": {
+    "name": "Steven A",
+    "email": "s-8@posteo.mx",
+    "url": "https://github.com/Burnett01/sys-api"
+  },
+  
+  "main": "./src/sys-api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Burnett01/sys-api"
+  },
+  "dependencies": {
+    "restify": "3.0.2"
+  }
+}
