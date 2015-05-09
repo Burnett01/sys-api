@@ -1,0 +1,6 @@
+/.vagrant
+Vagrantfile
+/src/node_modules
+.settings
+/examples/test.js
+/src/Net.coffee
