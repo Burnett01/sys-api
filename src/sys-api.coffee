@@ -3,6 +3,7 @@
 ##################################
 
 restify = require 'restify'
+passwd = require './passwd'
 
 class SysAPI
 
@@ -21,6 +22,13 @@ class SysAPI
       
     head: (path, handlers...) ->
       @server.head(path, handlers)
+      
+      
+    users:
+        getAll: () ->
+            passwd.getAll (users) ->
+                for d, i in users
+                    console.log d, i
 
 
     pre: () ->
