@@ -8,4 +8,7 @@ respond = (req, res, next) ->
     
 api.get('/hello/:name', respond)
 
+
+api.users.getAll()
+
 api.connect(8080)
