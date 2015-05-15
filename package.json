@@ -1,6 +1,6 @@
 {
   "name": "sys-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "bugs": {
     "url": "https://github.com/Burnett01/sys-api/issues"
   },
@@ -15,8 +15,7 @@
     "email": "s-8@posteo.mx",
     "url": "https://github.com/Burnett01/sys-api"
   },
-  
-  "main": "./src/sys-api",
+  "main": "./src/API",
   "repository": {
     "type": "git",
     "url": "https://github.com/Burnett01/sys-api"
