@@ -1,6 +1,18 @@
-SysAPI = require '../src/sys-api'
+SysAPI = require '../src/API'
 
 api = new SysAPI({})
+
+### Authorization ###
+
+api.auth({
+    enabled: true,
+    method: 'basic',
+    users: {
+        test: {
+            password: 'testpw'
+        }   
+    }
+})
 
 ###->>>>>   NET   <<<<<-###
 api.get('/net/isip/:ip', (req, res, next) ->
@@ -25,6 +37,12 @@ api.get('/net/isv6/:ip', (req, res, next) ->
 api.get('/sys/users/all', (req, res, next) ->
     api.respond(req, res, next, 
         api.sys.users.all()
+    )
+)
+
+api.get('/sys/users/get/:user', (req, res, next) ->
+    api.respond(req, res, next, 
+        api.sys.users.get(req.params.user)
     )
 )
 
