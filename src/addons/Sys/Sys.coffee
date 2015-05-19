@@ -7,7 +7,7 @@ Sys =
             add: () ->
             del: (user) ->
             get: (user) ->
-                
+                passwd.get(user)
             all: () ->
                 passwd.getAll()
 

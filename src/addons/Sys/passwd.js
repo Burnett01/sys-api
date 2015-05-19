@@ -108,18 +108,15 @@ exports.passwd = function (username, pass, opts, cb) {
 
 exports.getAll = getUsers;
 
-exports.get = function (username, cb) {
-    getUsers(function (users) {
-        foundUser = false;
-        for (i = 0; i < users.length; i++) {
-            var user = users[i];
-            if (user.username == username) {
-                cb(user);
-                return;
-            }
-        };
-        cb(null);
-    });
+exports.get = function (username) {
+    users = getUsers();
+    
+    for (i = 0; i < users.length; i++) {
+        var user = users[i];
+        if (user.username == username) {
+            return user;
+        }
+    }
 }
 
 function getUsers () {
@@ -144,28 +141,4 @@ function getUsers () {
     });
     
     return users;
- 
-    /*fs.readFile('/etc/passwd', function (err, users) {
-        if (err) throw err;
-        cb(
-            users
-            .toString()
-            .split('\n')
-            .filter(function (user) {
-                return user.length && user[0] != '#';
-            })
-            .map(function (user) {
-                var fields = user.split(':');
-                return {
-                    username : fields[0],
-                    password : fields[1],
-                    userId : fields[2],
-                    groupId : fields[3],
-                    name : fields[4],
-                    homedir : fields[5],
-                    shell : fields[6]
-                }
-            })
-        );
-    });*/
 }

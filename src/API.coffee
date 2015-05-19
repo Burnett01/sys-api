@@ -22,17 +22,31 @@ class SysAPI extends AddonHelper
         @server.listen port, () ->
             console.log('API listening on port %d', port);
         
+    auth: (options) ->
+        options = options || {enabled:false}
+        
+        if options.enabled == true
+            @server.use(restify.authorizationParser())
+            
+            if options.method == 'basic' || options.hasOwnProperty('users')
+                users = options.users
+                
+                @server.use((req, res, next) ->
+                    if req.username == 'anonymous' || !users[req.username] || req.authorization.basic.password != users[req.username].password
+                        next(new restify.NotAuthorizedError())
+                    else
+                    next()
+                )
+ 
+    head: (path, handlers...) ->
+      @server.head(path, handlers)
+        
     get: (path, handlers...) ->
       @server.get(path, handlers)
       
-    get_res: (path, v) ->
-      @server.get(path, (req, res, next) ->
-        res.send({ response: v })
-        next()
-      )
-      
-    head: (path, handlers...) ->
-      @server.head(path, handlers)
+    post: (path, handlers...) ->
+      @server.post(path, handlers)
+     
       
     respond: (req, res, next, v) ->
         res.send({ response: v })
@@ -40,6 +54,7 @@ class SysAPI extends AddonHelper
       
  
     pre: () ->
+        return
         #console.log('Invoked PRE-SCRIPTS')
         #return
 
