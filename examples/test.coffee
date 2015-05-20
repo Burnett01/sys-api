@@ -1,8 +1,8 @@
-SysAPI = require '../src/API'
+API = require '../src/API'
 
-api = new SysAPI({})
+api = new API({})
 
-### Authorization ###
+# => Authorization
 
 api.auth({
     enabled: true,
@@ -14,35 +14,146 @@ api.auth({
     }
 })
 
-###->>>>>   NET   <<<<<-###
+
+#<-- Addon: Net | Path: /net -->#
+
 api.get('/net/isip/:ip', (req, res, next) ->
-    api.respond(req, res, next, 
+    api.response(req, res, next, 
         api.net.isIP(req.params.ip)
     )
 )
 
 api.get('/net/isv4/:ip', (req, res, next) ->
-    api.respond(req, res, next, 
+    api.response(req, res, next, 
         api.net.isIPv4(req.params.ip)
     )
 )
 
 api.get('/net/isv6/:ip', (req, res, next) ->
-    api.respond(req, res, next, 
+    api.response(req, res, next, 
         api.net.isIPv6(req.params.ip)
     )
 )
 
-###->>>>>   SYS   <<<<<-###
-api.get('/sys/users/all', (req, res, next) ->
-    api.respond(req, res, next, 
-        api.sys.users.all()
+#<-- Addon: OS | Path: /os/users -->#
+
+api.get('/os/users/all', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.all()
     )
 )
 
-api.get('/sys/users/get/:user', (req, res, next) ->
-    api.respond(req, res, next, 
-        api.sys.users.get(req.params.user)
+api.get('/os/users/get/:user', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.get(req.params.user)
+    )
+)
+
+api.get('/os/users/add/:user/:pass', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.add(req.params.user, req.params.pass, { 
+            createHome: false, 
+            sudo: true 
+        })
+    )
+)
+
+api.get('/os/users/lock/:user', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.lock(req.params.user, { sudo: true })
+    )
+)
+
+api.get('/os/users/unlock/:user', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.unlock(req.params.user, { sudo: true })
+    )
+)
+
+api.get('/os/users/del/:user', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.users.del(req.params.user, { sudo: true })
+    )
+)
+
+
+#<-- Addon: OS | Path: /os/system -->#
+
+api.get('/os/system/hostname', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.hostname()
+    )
+)
+
+api.get('/os/system/type', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.type()
+    )
+)
+
+api.get('/os/system/platform', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.platform()
+    )
+)
+
+api.get('/os/system/arch', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.arch()
+    )
+)
+
+api.get('/os/system/release', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.release()
+    )
+)
+
+api.get('/os/system/eol', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.eol
+    )
+)
+
+api.get('/os/system/uptime', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.uptime()
+    )
+)
+
+api.get('/os/system/loadavg', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.loadavg()
+    )
+)
+
+api.get('/os/system/memory/total', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.memory.total()
+    )
+)
+
+api.get('/os/system/memory/free', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.memory.free()
+    )
+)
+
+api.get('/os/system/memory/free', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.memory.free()
+    )
+)
+
+api.get('/os/system/cpus', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.cpus()
+    )
+)
+
+api.get('/os/system/networkInterfaces', (req, res, next) ->
+    api.response(req, res, next, 
+        api.os.system.networkInterfaces()
     )
 )
 
