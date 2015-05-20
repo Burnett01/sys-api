@@ -1,6 +1,6 @@
 net = require 'net'
 
-Net =
+Addon =
     net:
         isIP: (input) ->
             net.isIP(input)
@@ -11,4 +11,4 @@ Net =
         isIPv6: (input) ->
             net.isIPv6(input)
    
-module.exports = Net
+module.exports = Addon
