@@ -6,24 +6,24 @@ restify = require 'restify'
 
 AddonHelper = require './AddonHelper'
 
-Sys = require './addons/Sys/Sys'
+Os  = require './addons/Os/Os'
 Net = require './addons/Net/Net'
 
-class SysAPI extends AddonHelper
 
-    @include Sys
+class API extends AddonHelper
+
+    @include Os
     @include Net
-    
+
     constructor: (options) ->
         @server = new restify.createServer(options);
-        @pre()
 
     connect: (port) ->
         @server.listen port, () ->
             console.log('API listening on port %d', port);
         
     auth: (options) ->
-        options = options || {enabled:false}
+        options = options || { enabled: false }
         
         if options.enabled == true
             @server.use(restify.authorizationParser())
@@ -35,7 +35,7 @@ class SysAPI extends AddonHelper
                     if req.username == 'anonymous' || !users[req.username] || req.authorization.basic.password != users[req.username].password
                         next(new restify.NotAuthorizedError())
                     else
-                    next()
+                        return next()
                 )
  
     head: (path, handlers...) ->
@@ -47,16 +47,16 @@ class SysAPI extends AddonHelper
     post: (path, handlers...) ->
       @server.post(path, handlers)
      
-      
-    respond: (req, res, next, v) ->
-        res.send({ response: v })
-        next()
-      
- 
-    pre: () ->
-        return
-        #console.log('Invoked PRE-SCRIPTS')
-        #return
+    response: (req, res, next, x) ->
+        response = {}
+        
+        if x.err? && x.err != ''   
+            response.err = x.err
+        else
+            response.data = x
+              
+        res.send({ response: response });
+        return next();
+        
 
-
-module.exports = SysAPI
+module.exports = API
