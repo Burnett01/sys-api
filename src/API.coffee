@@ -38,7 +38,14 @@ class API extends AddonHelper
                     else
                         return next()
                 )
- 
+                
+    cors: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server.use(restify.CORS(options.settings))
+            
+
     head: (path, handlers...) ->
       @server.head(path, handlers)
         

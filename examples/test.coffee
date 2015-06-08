@@ -14,6 +14,12 @@ api.auth({
     }
 })
 
+# => CORS (Cross-Origin Resource Sharing)
+
+api.cors({
+    enabled: false
+})
+
 
 #<-- Addon: Net | Path: /net -->#
 
