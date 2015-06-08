@@ -6,12 +6,13 @@ restify = require 'restify'
 
 AddonHelper = require './AddonHelper'
 
+Fs = require './addons/Fs/Fs'
 Os  = require './addons/Os/Os'
 Net = require './addons/Net/Net'
 
-
 class API extends AddonHelper
 
+    @include Fs
     @include Os
     @include Net
 
