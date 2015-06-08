@@ -4,7 +4,7 @@ path = require 'path'
 Addon =
     fs:     
         readFile: (path, cb) ->
-            fs.readFile(path, (err, data)  ->
+            fs.readFile(path, 'utf8', (err, data)  ->
                 cb(err, data)
             )
             
