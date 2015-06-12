@@ -1,6 +1,7 @@
 /.vagrant
 Vagrantfile
 /src/node_modules
+/node_modules
 .settings
 /examples/test.js
 /examples/_dev
