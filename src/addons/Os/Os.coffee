@@ -1,5 +1,6 @@
 os      = require 'os'
-passwd  = require './passwd'
+passwd  = require './assets/passwd'
+Fs = require '../Fs/Fs'
 
 Addon =
     os:
@@ -40,31 +41,41 @@ Addon =
             networkInterfaces: () ->
                 os.networkInterfaces()
                 
+            netfilter:
+                ip_conntrack_count: (cb) ->
+                    Fs.fs.readFile("/proc/sys/net/ipv4/netfilter/ip_conntrack_count", (err, data) ->
+                        cb(err, data)
+                    )
         users:
-            all: () ->
-                f = passwd.getAll()
-                return if Object.keys(f).length == 0 then { err: "Couldn't load users" } else f
+            all: (cb) ->
+                passwd.getAll((users) ->
+                   cb(users)
+                )
                 
-            get: (username) ->
-                f = passwd.get(username)
-                return if f == undefined then { err: "User was not found!" } else f
+            get: (username, cb) ->
+                passwd.get(username, (user) ->
+                   cb(user)
+                )
                 
-            add: (username, pass, opts) ->
-                f = passwd.add(username, pass, opts)
-                return if f.status != 0 then { err: f.stderr.toString() } else f.status
-            
-            lock: (username, opts) ->
-                f = passwd.lock(username, opts)
-                return if f.status != 0 then { err: f.stderr.toString() } else f.status
-                
-            unlock: (username, opts) ->
-                f = passwd.unlock(username, opts)
-                return if f.status != 0 then { err: f.stderr.toString() } else f.status
-                
-            del: (username, opts) ->
-                f = passwd.del(username, opts)
-                return if f.status != 0 then { err: f.stderr.toString() } else f.status
-                
+            add: (username, pass, opts, cb) ->
+                passwd.add(username, pass, opts, (status) ->
+                   cb(status)
+                )
            
+            lock: (username, opts, cb) ->
+                passwd.lock(username, opts, (status) ->
+                   cb(status)
+                )
+            
+            unlock: (username, opts, cb) ->
+                passwd.unlock(username, opts, (status) ->
+                   cb(status)
+                )
+                
+            del: (username, opts, cb) ->
+                passwd.del(username, opts, (status) ->
+                   cb(status)
+                )
+                
 
 module.exports = Addon

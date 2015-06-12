@@ -7,11 +7,18 @@ api = new API({})
 api.auth({
     enabled: true,
     method: 'basic',
+    bcrypt: true,
     users: {
         test: {
             password: 'testpw'
         }   
     }
+})
+
+# => CORS (Cross-Origin Resource Sharing)
+
+api.cors({
+    enabled: false
 })
 
 
@@ -38,41 +45,44 @@ api.get('/net/isv6/:ip', (req, res, next) ->
 #<-- Addon: OS | Path: /os/users -->#
 
 api.get('/os/users/all', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.all()
+    api.os.users.all((users) ->
+        api.response(req, res, next, users)
     )
 )
 
 api.get('/os/users/get/:user', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.get(req.params.user)
+    api.os.users.get(req.params.user, (user) ->
+        api.response(req, res, next, user)
     )
 )
 
 api.get('/os/users/add/:user/:pass', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.add(req.params.user, req.params.pass, { 
-            createHome: false, 
-            sudo: true 
-        })
+    opts = { 
+        createHome: false, 
+        sudo: true 
+    }
+    
+    api.os.users.add(req.params.user, req.params.pass, opts, (status) ->
+        api.response(req, res, next, status)
     )
 )
 
 api.get('/os/users/lock/:user', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.lock(req.params.user, { sudo: true })
+    api.os.users.lock(req.params.user, { sudo: true }, (status) ->
+        api.response(req, res, next, status)
     )
 )
 
 api.get('/os/users/unlock/:user', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.unlock(req.params.user, { sudo: true })
+    api.os.users.unlock(req.params.user, { sudo: true }, (status) ->
+        api.response(req, res, next, status)
     )
 )
 
+
 api.get('/os/users/del/:user', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.users.del(req.params.user, { sudo: true })
+    api.os.users.del(req.params.user, { sudo: true }, (status) ->
+        api.response(req, res, next, status)
     )
 )
 
@@ -156,6 +166,13 @@ api.get('/os/system/networkInterfaces', (req, res, next) ->
         api.os.system.networkInterfaces()
     )
 )
+
+api.get('/os/system/netfilter/ip_conntrack_count', (req, res, next) ->
+    api.os.system.netfilter.ip_conntrack_count((err, data) ->
+        api.response(req, res, next, { err:err, data:data})
+    )
+)
+
 
 api.connect(8080)
 
