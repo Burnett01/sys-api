@@ -22,6 +22,13 @@ api.cors({
 })
 
 
+#<-- Desc: Health-Status | Path: /heartbeat -->#
+
+api.get('/heartbeat', (req, res, next) ->
+    api.response(req, res, next, "dub")
+)
+
+
 #<-- Addon: Net | Path: /net -->#
 
 api.get('/net/isip/:ip', (req, res, next) ->
@@ -89,6 +96,25 @@ api.get('/os/users/del/:user', (req, res, next) ->
 
 #<-- Addon: OS | Path: /os/system -->#
 
+api.get('/os/system/all', (req, res, next) ->
+    api.response(req, res, next, { 
+        "hostname": api.os.system.hostname(),
+        "type": api.os.system.type(),
+        "platform": api.os.system.platform(),
+        "arch": api.os.system.arch(),
+        "release": api.os.system.release(),
+        "eol": api.os.system.eol,
+        "uptime": api.os.system.uptime(),
+        "loadavg": api.os.system.loadavg(),
+        "memory": {
+            "total": api.os.system.memory.total(),
+            "free": api.os.system.memory.free()
+        },
+        "cpus" : api.os.system.cpus(),
+        "networkInterfaces" : api.os.system.networkInterfaces()
+    })
+)
+
 api.get('/os/system/hostname', (req, res, next) ->
     api.response(req, res, next, 
         api.os.system.hostname()
@@ -140,12 +166,6 @@ api.get('/os/system/loadavg', (req, res, next) ->
 api.get('/os/system/memory/total', (req, res, next) ->
     api.response(req, res, next, 
         api.os.system.memory.total()
-    )
-)
-
-api.get('/os/system/memory/free', (req, res, next) ->
-    api.response(req, res, next, 
-        api.os.system.memory.free()
     )
 )
 
