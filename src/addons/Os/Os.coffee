@@ -48,54 +48,54 @@ Addon =
                     )
         users:
             all: (cb) ->
-                pwdg.getAllUsers((users) ->
-                   cb(users)
+                pwdg.getAllUsers((err, users) ->
+                   cb(err, users)
                 )
                 
             get: (username, cb) ->
-                pwdg.getUser(username, (user) ->
-                   cb(user)
+                pwdg.getUser(username, (err, user) ->
+                   cb(err, user)
                 )
                 
             add: (username, pass, opts, cb) ->
-                pwdg.addUser(username, pass, opts, (status) ->
-                   cb(status)
+                pwdg.addUser(username, pass, opts, (err, status) ->
+                   cb(err, status)
                 )
            
             lock: (username, opts, cb) ->
-                pwdg.lockUser(username, opts, (status) ->
-                   cb(status)
+                pwdg.lockUser(username, opts, (err, status) ->
+                   cb(err, status)
                 )
             
             unlock: (username, opts, cb) ->
-                pwdg.unlockUser(username, opts, (status) ->
-                   cb(status)
+                pwdg.unlockUser(username, opts, (err, status) ->
+                   cb(err, status)
                 )
                 
             del: (username, opts, cb) ->
-                pwdg.delUser(username, opts, (status) ->
-                   cb(status)
+                pwdg.delUser(username, opts, (err, status) ->
+                   cb(err, status)
                 )
                 
         groups:
             all: (cb) ->
-                pwdg.getAllGroups((groups) ->
-                   cb(groups)
+                pwdg.getAllGroups((err, groups) ->
+                   cb(err, groups)
                 )
                 
             get: (name, cb) ->
-                pwdg.getGroup(name, (group) ->
-                   cb(group)
+                pwdg.getGroup(name, (err, group) ->
+                   cb(err, group)
                 )
                 
             add: (name, opts, cb) ->
-                pwdg.addGroup(name, opts, (status) ->
-                   cb(status)
+                pwdg.addGroup(name, opts, (err, status) ->
+                   cb(err, status)
                 )
                 
             del: (name, opts, cb) ->
-                pwdg.delGroup(name, opts, (status) ->
-                   cb(status)
+                pwdg.delGroup(name, opts, (err, status) ->
+                   cb(err, status)
                 )
                 
 

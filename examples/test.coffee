@@ -52,13 +52,15 @@ api.get('/net/isv6/:ip', (req, res, next) ->
 #<-- Addon: OS | Path: /os/users -->#
 
 api.get('/os/users/all', (req, res, next) ->
-    api.os.users.all((users) ->
+    api.os.users.all((err, users) ->
+        next.ifError(err)
         api.response(req, res, next, users)
     )
 )
 
 api.get('/os/users/get/:user', (req, res, next) ->
-    api.os.users.get(req.params.user, (user) ->
+    api.os.users.get(req.params.user, (err, user) ->
+        next.ifError(err)
         api.response(req, res, next, user)
     )
 )
@@ -69,26 +71,30 @@ api.get('/os/users/add/:user/:pass', (req, res, next) ->
         sudo: true 
     }
     
-    api.os.users.add(req.params.user, req.params.pass, opts, (status) ->
+    api.os.users.add(req.params.user, req.params.pass, opts, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )
 
 api.get('/os/users/lock/:user', (req, res, next) ->
-    api.os.users.lock(req.params.user, { sudo: true }, (status) ->
+    api.os.users.lock(req.params.user, { sudo: true }, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )
 
 api.get('/os/users/unlock/:user', (req, res, next) ->
-    api.os.users.unlock(req.params.user, { sudo: true }, (status) ->
+    api.os.users.unlock(req.params.user, { sudo: true }, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )
 
 
 api.get('/os/users/del/:user', (req, res, next) ->
-    api.os.users.del(req.params.user, { sudo: true }, (status) ->
+    api.os.users.del(req.params.user, { sudo: true }, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )
@@ -97,13 +103,15 @@ api.get('/os/users/del/:user', (req, res, next) ->
 #<-- Addon: OS | Path: /os/groups -->#
 
 api.get('/os/groups/all', (req, res, next) ->
-    api.os.groups.all((groups) ->
+    api.os.groups.all((err, groups) ->
+        next.ifError(err)
         api.response(req, res, next, groups)
     )
 )
 
 api.get('/os/groups/get/:group', (req, res, next) ->
-    api.os.groups.get(req.params.group, (group) ->
+    api.os.groups.get(req.params.group, (err, group) ->
+        next.ifError(err)
         api.response(req, res, next, group)
     )
 )
@@ -114,13 +122,15 @@ api.get('/os/groups/add/:group', (req, res, next) ->
         sudo: true 
     }
     
-    api.os.groups.add(req.params.group, opts, (status) ->
+    api.os.groups.add(req.params.group, opts, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )
 
 api.get('/os/groups/del/:group', (req, res, next) ->
-    api.os.groups.del(req.params.group, { sudo: true }, (status) ->
+    api.os.groups.del(req.params.group, { sudo: true }, (err, status) ->
+        next.ifError(err)
         api.response(req, res, next, status)
     )
 )

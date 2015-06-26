@@ -70,14 +70,7 @@ class API extends AddonHelper
       @server.post(path, handlers)
      
     response: (req, res, next, x) ->
-        response = {}
-        
-        if x.err? && x.err != ''   
-            response.err = x.err
-        else
-            response.data = x
-              
-        res.send({ response: response });
+        res.send({ data: x });
         return next();
         
 

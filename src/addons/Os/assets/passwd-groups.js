@@ -47,7 +47,11 @@ exports.addUser = function (username, pass, opts, cb) {
         }
         var passwd = spawn(cmd, useraddOpts);
         passwd.on('exit', function (code, signal) {
-            cb(code);
+            if(code == 0){
+                cb(null, code);
+            }else{
+                cb("Couldn't create user. Code: " + code, null);
+            }
         });
     });
 };
@@ -63,7 +67,11 @@ exports.delUser = function (username, opts, cb) {
     }
     var passwd = spawn(cmd, args);
     passwd.on('exit', function (code, signal) {
-        cb(code);
+        if(code == 0){
+            cb(null, code);
+        }else{
+            cb("Couldn't remove user. Code: " + code, null);
+        }
     });
 };
 
@@ -78,7 +86,11 @@ exports.lockUser = function (username, opts, cb) {
     }
     var passwd = spawn(cmd, args);
     passwd.on('exit', function (code, signal) {
-        cb(code);
+        if(code == 0){
+            cb(null, code);
+        }else{
+            cb("Couldn't lock user. Code: " + code, null);
+        }
     });
 };
 
@@ -93,7 +105,11 @@ exports.unlockUser = function (username, opts, cb) {
     }
     var passwd = spawn(cmd, args);
     passwd.on('exit', function (code, signal) {
-        cb(code);
+        if(code == 0){
+            cb(null, code);
+        }else{
+            cb("Couldn't unlock user. Code: " + code, null);
+        }
     });
 };
 
@@ -117,22 +133,23 @@ exports.passwd = function (username, pass, opts, cb) {
 exports.getAllUsers = _getUsers;
 
 exports.getUser = function (username, cb) {
-    _getUsers(function (users) {
+    _getUsers(function (err, users) {
+        if (err) cb(err, null);
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
             if (user.username == username) {
-                cb(user);
+                cb(null, user);
                 return;
             }
         };
-        cb(null);
+        cb('User was not found!', null);
     });
 };
 
 function _getUsers (cb) {
     fs.readFile('/etc/passwd', function (err, users) {
-        if (err) throw err;
-        cb(
+        if (err) cb(err, null);
+        cb(null,
             users
             .toString()
             .split('\n')
@@ -176,7 +193,11 @@ exports.addGroup = function (name, opts, cb) {
     }
     var passwd = spawn(cmd, groupaddOpts);
     passwd.on('exit', function (code, signal) {
-        cb(code);
+        if(code == 0){
+            cb(null, code);
+        }else{
+            cb("Couldn't create group. Code: " + code, null);
+        }
     });
     
 };
@@ -192,29 +213,34 @@ exports.delGroup = function (name, opts, cb) {
     }
     var passwd = spawn(cmd, args);
     passwd.on('exit', function (code, signal) {
-        cb(code);
+        if(code == 0){
+            cb(null, code);
+        }else{
+            cb("Couldn't remove group. Code: " + code, null);
+        }
     });
 };
 
 exports.getAllGroups = _getGroups;
 
 exports.getGroup = function (name, cb) {
-    _getGroups(function (groups) {
+    _getGroups(function (err, groups) {
+        if (err) cb(err, null);
         for (var i = 0; i < groups.length; i++) {
             var group = groups[i];
             if (group.name == name) {
-                cb(group);
+                cb(null, group);
                 return;
             }
         };
-        cb(null);
+        cb('Group was not found!', null);
     });
 };
 
 function _getGroups (cb) {
     fs.readFile('/etc/group', function (err, groups) {
-        if (err) throw err;
-        cb(
+        if (err) cb(err, null);
+        cb(null,
             groups
             .toString()
             .split('\n')
