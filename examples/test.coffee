@@ -7,7 +7,7 @@ api = new API({})
 api.auth({
     enabled: true,
     method: 'basic',
-    bcrypt: true,
+    bcrypt: false,
     users: {
         test: {
             password: 'testpw'
@@ -89,6 +89,38 @@ api.get('/os/users/unlock/:user', (req, res, next) ->
 
 api.get('/os/users/del/:user', (req, res, next) ->
     api.os.users.del(req.params.user, { sudo: true }, (status) ->
+        api.response(req, res, next, status)
+    )
+)
+
+
+#<-- Addon: OS | Path: /os/groups -->#
+
+api.get('/os/groups/all', (req, res, next) ->
+    api.os.groups.all((groups) ->
+        api.response(req, res, next, groups)
+    )
+)
+
+api.get('/os/groups/get/:group', (req, res, next) ->
+    api.os.groups.get(req.params.group, (group) ->
+        api.response(req, res, next, group)
+    )
+)
+
+api.get('/os/groups/add/:group', (req, res, next) ->
+    opts = { 
+        #system: false, 
+        sudo: true 
+    }
+    
+    api.os.groups.add(req.params.group, opts, (status) ->
+        api.response(req, res, next, status)
+    )
+)
+
+api.get('/os/groups/del/:group', (req, res, next) ->
+    api.os.groups.del(req.params.group, { sudo: true }, (status) ->
         api.response(req, res, next, status)
     )
 )

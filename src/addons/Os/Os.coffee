@@ -1,6 +1,6 @@
 os      = require 'os'
-passwd  = require './assets/passwd'
-Fs = require '../Fs/Fs'
+pwdg    = require './assets/passwd-groups'
+Fs      = require '../Fs/Fs'
 
 Addon =
     os:
@@ -48,32 +48,53 @@ Addon =
                     )
         users:
             all: (cb) ->
-                passwd.getAll((users) ->
+                pwdg.getAllUsers((users) ->
                    cb(users)
                 )
                 
             get: (username, cb) ->
-                passwd.get(username, (user) ->
+                pwdg.getUser(username, (user) ->
                    cb(user)
                 )
                 
             add: (username, pass, opts, cb) ->
-                passwd.add(username, pass, opts, (status) ->
+                pwdg.addUser(username, pass, opts, (status) ->
                    cb(status)
                 )
            
             lock: (username, opts, cb) ->
-                passwd.lock(username, opts, (status) ->
+                pwdg.lockUser(username, opts, (status) ->
                    cb(status)
                 )
             
             unlock: (username, opts, cb) ->
-                passwd.unlock(username, opts, (status) ->
+                pwdg.unlockUser(username, opts, (status) ->
                    cb(status)
                 )
                 
             del: (username, opts, cb) ->
-                passwd.del(username, opts, (status) ->
+                pwdg.delUser(username, opts, (status) ->
+                   cb(status)
+                )
+                
+        groups:
+            all: (cb) ->
+                pwdg.getAllGroups((groups) ->
+                   cb(groups)
+                )
+                
+            get: (name, cb) ->
+                pwdg.getGroup(name, (group) ->
+                   cb(group)
+                )
+                
+            add: (name, opts, cb) ->
+                pwdg.addGroup(name, opts, (status) ->
+                   cb(status)
+                )
+                
+            del: (name, opts, cb) ->
+                pwdg.delGroup(name, opts, (status) ->
                    cb(status)
                 )
                 

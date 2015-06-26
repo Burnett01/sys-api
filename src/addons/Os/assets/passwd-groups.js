@@ -1,3 +1,11 @@
+/*
+    Source: https://github.com/pkrumins/node-passwd
+    It was written by Peteris Krumins (peter@catonmat.net, @pkrumins on twitter).
+    His blog is at http://www.catonmat.net  --  good coders code, great reuse.
+    
+    Edited by @Burnett01 - Now with /etc/group (group(5)) support
+*/
+
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 
@@ -14,9 +22,15 @@ exports.shadowPass = function (pass, cb) {
     openssl.stdout.on('data', function (buf) {
         cb(buf.toString().slice(0,-1));
     });
-}
+};
 
-exports.add = function (username, pass, opts, cb) {
+
+/*  ++++++++++++++++++++++
+    ++++ User Methods ++++
+    ++++++++++++++++++++++
+*/
+
+exports.addUser = function (username, pass, opts, cb) {
     var opts = opts || {};
     var cb = cb || function () { };
     exports.shadowPass(pass, function (shadowPass) {
@@ -36,9 +50,9 @@ exports.add = function (username, pass, opts, cb) {
             cb(code);
         });
     });
-}
+};
 
-exports.del = function (username, opts, cb) {
+exports.delUser = function (username, opts, cb) {
     var opts = opts || {};
     var cb = cb || function () { };
     var cmd = 'userdel';
@@ -51,9 +65,9 @@ exports.del = function (username, opts, cb) {
     passwd.on('exit', function (code, signal) {
         cb(code);
     });
-}
+};
 
-exports.lock = function (username, opts, cb) {
+exports.lockUser = function (username, opts, cb) {
     var opts = opts || {};
     var cb = cb || function () { };
     var cmd = 'usermod';
@@ -66,9 +80,9 @@ exports.lock = function (username, opts, cb) {
     passwd.on('exit', function (code, signal) {
         cb(code);
     });
-}
+};
 
-exports.unlock = function (username, opts, cb) {
+exports.unlockUser = function (username, opts, cb) {
     var opts = opts || {};
     var cb = cb || function () { };
     var cmd = 'usermod';
@@ -81,7 +95,7 @@ exports.unlock = function (username, opts, cb) {
     passwd.on('exit', function (code, signal) {
         cb(code);
     });
-}
+};
 
 exports.passwd = function (username, pass, opts, cb) {
     var opts = opts || {};
@@ -98,14 +112,13 @@ exports.passwd = function (username, pass, opts, cb) {
             cb(code);
         });
     });
-}
+};
 
-exports.getAll = getUsers;
+exports.getAllUsers = _getUsers;
 
-exports.get = function (username, cb) {
-    getUsers(function (users) {
-        foundUser = false;
-        for (i = 0; i < users.length; i++) {
+exports.getUser = function (username, cb) {
+    _getUsers(function (users) {
+        for (var i = 0; i < users.length; i++) {
             var user = users[i];
             if (user.username == username) {
                 cb(user);
@@ -114,9 +127,9 @@ exports.get = function (username, cb) {
         };
         cb(null);
     });
-}
+};
 
-function getUsers (cb) {
+function _getUsers (cb) {
     fs.readFile('/etc/passwd', function (err, users) {
         if (err) throw err;
         cb(
@@ -136,7 +149,86 @@ function getUsers (cb) {
                     name : fields[4],
                     homedir : fields[5],
                     shell : fields[6]
-                }
+                };
+            })
+        );
+    });
+}
+
+
+/*  +++++++++++++++++++++++
+    ++++ Group Methods ++++
+    +++++++++++++++++++++++
+*/
+
+exports.addGroup = function (name, opts, cb) {
+    var opts = opts || {};
+    var cb = cb || function () { };
+
+    var groupaddOpts = [];
+    if (opts.system) groupaddOpts.push('-r');
+
+    groupaddOpts.push(name);
+    var cmd = 'groupadd';
+    if (opts.sudo) {
+        cmd = 'sudo';
+        groupaddOpts = ['groupadd'].concat(groupaddOpts);
+    }
+    var passwd = spawn(cmd, groupaddOpts);
+    passwd.on('exit', function (code, signal) {
+        cb(code);
+    });
+    
+};
+
+exports.delGroup = function (name, opts, cb) {
+    var opts = opts || {};
+    var cb = cb || function () { };
+    var cmd = 'groupdel';
+    var args = [name];
+    if (opts.sudo) {
+        cmd = 'sudo';
+        args = ['groupdel'].concat(args);
+    }
+    var passwd = spawn(cmd, args);
+    passwd.on('exit', function (code, signal) {
+        cb(code);
+    });
+};
+
+exports.getAllGroups = _getGroups;
+
+exports.getGroup = function (name, cb) {
+    _getGroups(function (groups) {
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            if (group.name == name) {
+                cb(group);
+                return;
+            }
+        };
+        cb(null);
+    });
+};
+
+function _getGroups (cb) {
+    fs.readFile('/etc/group', function (err, groups) {
+        if (err) throw err;
+        cb(
+            groups
+            .toString()
+            .split('\n')
+            .filter(function (group) {
+                return group.length && group[0] != '#';
+            })
+            .map(function (group) {
+                var fields = group.split(':');
+                return {
+                    name : fields[0],
+                    password : fields[1],
+                    id : fields[2],
+                    members : fields[3].split(',')
+                };
             })
         );
     });
