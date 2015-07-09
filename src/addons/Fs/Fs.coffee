@@ -8,6 +8,4 @@ Addon =
                 cb(err, data)
             )
             
-            
-
 module.exports = Addon
