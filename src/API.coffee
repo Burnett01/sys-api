@@ -60,6 +60,8 @@ class API extends AddonHelper
             @server.use(restify.CORS(options.settings))
             
 
+    error: restify.errors
+    
     head: (path, handlers...) ->
       @server.head(path, handlers)
         

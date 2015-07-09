@@ -7,7 +7,7 @@ api = new API({})
 api.auth({
     enabled: true,
     method: 'basic',
-    bcrypt: false,
+    bcrypt: true,
     users: {
         test: {
             password: 'testpw'
@@ -48,6 +48,9 @@ api.get('/net/isv6/:ip', (req, res, next) ->
         api.net.isIPv6(req.params.ip)
     )
 )
+
+#<-- Addon: FS | Path: /fs -->#
+
 
 #<-- Addon: OS | Path: /os/users -->#
 
