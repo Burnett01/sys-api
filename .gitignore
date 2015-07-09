@@ -5,3 +5,8 @@ Vagrantfile
 .settings
 /examples/test.js
 /examples/_dev
+/examples/plus
+/examples/passwd_sync_obsolete.js
+/test
+t.js
+.gitignore
