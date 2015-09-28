@@ -52,15 +52,24 @@ class API extends AddonHelper
                         if req.authorization.basic.password == users[req.username].password then return next() else next(new restify.NotAuthorizedError())
                 )
 
-                
+    # Restify Plugins
+
     cors: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server.use(restify.CORS(options.settings))
             
-
+    bodyParser: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server.use(restify.bodyParser(options.settings))
+    
     error: restify.errors
+    
+
+    # Restify Methods
     
     head: (path, handlers...) ->
       @server.head(path, handlers)
@@ -71,6 +80,9 @@ class API extends AddonHelper
     post: (path, handlers...) ->
       @server.post(path, handlers)
      
+
+    # Custom Methods
+
     response: (req, res, next, x) ->
         res.send({ data: x });
         return next();

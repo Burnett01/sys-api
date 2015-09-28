@@ -8,5 +8,6 @@ Vagrantfile
 /examples/plus
 /examples/passwd_sync_obsolete.js
 /test
+/tests
 t.js
 .gitignore
