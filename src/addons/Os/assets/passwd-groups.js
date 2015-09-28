@@ -4,6 +4,7 @@
     His blog is at http://www.catonmat.net  --  good coders code, great reuse.
     
     Edited by @Burnett01 - Now with /etc/group (group(5)) support
+    Source: https://github.com/Burnett01/node-passwd
 */
 
 var fs = require('fs');
