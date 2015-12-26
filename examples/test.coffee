@@ -2,6 +2,13 @@ API = require '../src/API'
 
 api = new API({})
 
+# optional: pass an object for restify's createServer-function
+#           http://restify.com/#creating-a-server
+# example:  api = new API({ name: 'MyApp' })
+
+
+# ´´´´´´´ PLUGIN SETUP ´´´´´´´
+
 # => Authorization
 
 api.auth({
@@ -21,13 +28,34 @@ api.cors({
     enabled: false
 })
 
+# => BodyParser
+
+api.bodyParser({
+    enabled: true
+})
+
+
+# ´´´´´´´ DEMO ROUTES ´´´´´´´
 
 #<-- Desc: Health-Status | Path: /heartbeat -->#
+
+# Simple GET-Response
 
 api.get('/heartbeat', (req, res, next) ->
     api.response(req, res, next, "dub")
 )
 
+# Simple POST-Response
+# Access POST-values via req.body.value
+
+api.post('/heartbeat', (req, res, next) ->
+    api.response(req, res, next, req.body)
+)
+
+
+# ´´´´´´´ ADDON ROUTES ´´´´´´´
+# Each route correspondens to an addon
+# Check the src/addon/ folder for more information
 
 #<-- Addon: Net | Path: /net -->#
 
@@ -51,6 +79,12 @@ api.get('/net/isv6/:ip', (req, res, next) ->
 
 #<-- Addon: FS | Path: /fs -->#
 
+api.post('/fs/readfile', (req, res, next) ->
+    api.fs.readFile(req.body.path, (err, content) ->
+        next.ifError(err)
+        api.response(req, res, next, content)
+    )
+)
 
 #<-- Addon: OS | Path: /os/users -->#
 
@@ -238,6 +272,8 @@ api.get('/os/system/netfilter/ip_conntrack_count', (req, res, next) ->
     )
 )
 
+
+# ´´´´´´´ HIT IT UP! ´´´´´´´
 
 api.connect(8080)
 
