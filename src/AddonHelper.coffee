@@ -1,3 +1,6 @@
+# Credits to "The Little Book on CoffeeScript"
+# @ https://arcturo.github.io/library/coffeescript/03_classes.html
+
 moduleKeywords = ['extended', 'included']
 
 class AddonHelper
