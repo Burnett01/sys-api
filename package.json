@@ -4,13 +4,17 @@
   "bugs": {
     "url": "https://github.com/Burnett01/sys-api/issues"
   },
-  "description": "A system-API for nodeJS - written in coffeescript and based on restifyJS",
+  "description": "A modular System-API for Linux - written in Coffeescript, based on NodeJS and RestifyJS",
   "keywords": [
     "api",
     "system",
+    "modular",
+    "addons",
+    "plugins",
     "coffescript",
     "node",
-    "restifyjs"
+    "restifyjs",
+    "authentication"
   ],
   "author": {
     "name": "Steven A",
