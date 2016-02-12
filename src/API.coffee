@@ -1,24 +1,51 @@
 ##################################
-#   SYS-API (c) 2015 - Burnett
+#   SYS-API (c) 2016- Burnett
 ##################################
 
 restify = require 'restify'
 bcrypt  = require 'bcrypt';
 
-AddonHelper = require './AddonHelper'
+ClassHelper = require './ClassHelper'
 
-Fs = require './addons/Fs/Fs'
-Os  = require './addons/Os/Os'
-Net = require './addons/Net/Net'
+# Define Core-Addons
+Addons = [
+    "./addons/Fs",
+    "./addons/Os",
+    "./addons/Net"
+]
+    
+class API extends ClassHelper
+    
+    # Include and expose Core-Addons
+    for addon, index in Addons
+        @extend(require(addon))
+        @include(require(addon))
 
-class API extends AddonHelper
+    
+    # Plugin-Handler
+    plugins =
+        registerAll: (root) ->
+            console.log "Loading plugins.."
+            
+            API.fs.readDir(root, true, (err, files) ->
+                if err then return console.log(err)
+                for file, index in files
+                    API.include(require(file))
+            )
 
-    @include Fs
-    @include Os
-    @include Net
 
     constructor: (options) ->
-        @server = new restify.createServer(options);
+        @options = options
+        
+        if(typeof @options['restify'] == undefined)
+            @options.restify = {}
+            
+        @server = new restify.createServer(@options.restify);
+        
+        if('plugins.root' of @options)
+            if('plugins.autoload' of @options && @options['plugins.autoload'] == true)
+                plugins.registerAll(@options['plugins.root'])
+       
 
     connect: (port) ->
         @server.listen port, () ->
