@@ -2,19 +2,20 @@ API = require '../src/API'
 
 api = new API({})
 
-# optional: pass an object for restify's createServer-function
-#           http://restify.com/#creating-a-server
-# example:  api = new API({ name: 'MyApp' })
+# Check https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
+# optionally pass an object to restify's createServer-function
+# http://restify.com/#creating-a-server
+# example:  api = new API({ restify: { name: 'MyApp' } })
 
 
-# ´´´´´´´ PLUGIN SETUP ´´´´´´´
+# ´´´´´´´ SETUP ´´´´´´´
 
 # => Authorization
 
 api.auth({
     enabled: true,
     method: 'basic',
-    bcrypt: true,
+    bcrypt: false,
     users: {
         test: {
             password: 'testpw'
