@@ -3,7 +3,7 @@
 ##################################
 
 restify = require 'restify'
-bcrypt  = require 'bcrypt';
+bcrypt  = require 'bcryptjs';
 
 ClassHelper = require './ClassHelper'
 
@@ -21,6 +21,7 @@ class API extends ClassHelper
         @extend(require(addon))
         @include(require(addon))
 
+    @extend({ error: restify.errors})
     
     # Plugin-Handler
     plugins =
@@ -30,6 +31,7 @@ class API extends ClassHelper
             API.fs.readDir(root, true, (err, files) ->
                 if err then return console.log(err)
                 for file, index in files
+                    console.log "[LOADED] plugin-" + file
                     API.include(require(file))
             )
 

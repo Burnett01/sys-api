@@ -12,16 +12,15 @@ module.exports = {
             
          readDir: (base, dirsonly, cb) ->
             ret = []
-            fs.readdir(base, (err, files) ->
-                if err then return cb(err, null)
-                for file, index in files
-                    cur_path = path.join(base, file);
-                    stat = fs.statSync(cur_path)
-                    if(dirsonly && stat.isDirectory())
-                        ret.push(cur_path)
+            files = fs.readdirSync(base)
+            if !files then return cb("error retrving", null)
+            for file, index in files
+                cur_path = path.join(base, file);
+                stat = fs.statSync(cur_path)
+                if(dirsonly && stat.isDirectory())
+                    ret.push(cur_path)
                     
-                cb(null, ret)
-            )    
+            cb(null, ret)   
     
 }
 

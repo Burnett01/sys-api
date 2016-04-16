@@ -15,7 +15,7 @@ api = new API({})
 api.auth({
     enabled: true,
     method: 'basic',
-    bcrypt: false,
+    bcrypt: true,
     users: {
         test: {
             password: 'testpw'

@@ -3,11 +3,7 @@ Vagrantfile
 /src/node_modules
 /node_modules
 .settings
-/examples/test.js
-/examples/_dev
-/examples/plus
-/examples/passwd_sync_obsolete.js
+/examples/lime
 /test
-/tests
-t.js
+/testus
 .gitignore

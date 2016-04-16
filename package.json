@@ -1,6 +1,6 @@
 {
   "name": "sys-api",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "bugs": {
     "url": "https://github.com/Burnett01/sys-api/issues"
   },
@@ -27,7 +27,7 @@
     "url": "https://github.com/Burnett01/sys-api"
   },
   "dependencies": {
-    "bcrypt": "*",
-    "restify": "3.0.2"
+    "bcryptjs": "*",
+    "restify": "*"
   }
 }
