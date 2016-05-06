@@ -1,8 +1,8 @@
 {
   "name": "sys-api",
-  "version": "0.2.2",
+  "version": "0.3",
   "bugs": {
-    "url": "https://github.com/Burnett01/sys-api/issues"
+    "url": "https://github.com/Cloud2Box/sys-api/issues"
   },
   "description": "A modular System-API for Linux - written in Coffeescript, based on NodeJS and RestifyJS",
   "keywords": [
@@ -19,12 +19,12 @@
   "author": {
     "name": "Steven A",
     "email": "s-8@posteo.mx",
-    "url": "https://github.com/Burnett01/sys-api"
+    "url": "https://github.com/Cloud2Box/sys-api"
   },
   "main": "./src/API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Burnett01/sys-api"
+    "url": "https://github.com/Cloud2Box/sys-api"
   },
   "dependencies": {
     "bcryptjs": "*",

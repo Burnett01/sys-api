@@ -38,7 +38,7 @@ class API extends ClassHelper
 
     constructor: (options) ->
         @options = options
-        
+
         if(typeof @options['restify'] == undefined)
             @options.restify = {}
             
@@ -95,26 +95,45 @@ class API extends ClassHelper
         if options.enabled == true
             @server.use(restify.bodyParser(options.settings))
     
-    error: restify.errors
+    error: (message) ->
+        new restify.errors.InternalServerError()
     
 
-    # Restify Methods
+    # Internal Functions
     
-    head: (path, handlers...) ->
-      @server.head(path, handlers)
-        
-    get: (path, handlers...) ->
-      @server.get(path, handlers)
+    _response = (req, res, next, data) ->
+        res.send({ response: data })
+        return next()
       
-    post: (path, handlers...) ->
-      @server.post(path, handlers)
-     
+    _request = (callback, req, res, next, args) ->
+        if typeof callback is 'string' or typeof callback is 'object'
+            _response(req, res, next, callback)
+            
+        else if typeof callback is 'function'
+            return callback.apply(null, [{ req:req, res:res, next:next, send: (response) -> 
+                _response(req, res, next, response)
+            }].concat(args));
+        else
+            next(new restify.errors.InternalServerError(typeof callback + " is not a valid callback-method!"))
+            
+    
+    # More Methods
+    
+    head: (path, cb) ->
+      @server.head(path, (req, res, next) -> 
+        _request(cb, req, res, next)
+      )
+  
+    get: (path, cb, args...) ->
+      @server.get(path, (req, res, next) -> 
+        _request(cb, req, res, next, args)
+      )
+      
+    post: (path, cb) ->
+      @server.post(path, (req, res, next) -> 
+        _request(cb, req, res, next)
+      )
 
-    # Custom Methods
-
-    response: (req, res, next, x) ->
-        res.send({ data: x });
-        return next();
         
 
 module.exports = API
