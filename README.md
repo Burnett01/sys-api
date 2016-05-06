@@ -9,6 +9,11 @@ Each function represents an actual restifyJS-plugin (http://mcavage.me/node-rest
 + Authorization (with custom bcrypt-handler)
 + CORS
 + BodyParser
++ Extensive Routing
+
+### Routing
+There are tons of routing-variations!
+Check the wiki: https://github.com/Cloud2Box/sys-api/wiki/Routing
 
 ### Core-Addons
 Core-Addons are bound to the API and can be maintained from within an external file.
