@@ -2,12 +2,12 @@ net = require 'net'
 
 module.exports = {
     net:
-        isIP: (input) ->
-            net.isIP(input)
+        isIP: (router) ->
+            router.send(net.isIP(router.req.params.ip))
             
-        isIPv4: (input) ->
-            net.isIPv4(input)
-            
-        isIPv6: (input) ->
-            net.isIPv6(input)
+        isIPv4: (router) ->
+            router.send(net.isIPv4(router.req.params.ip))
+
+        isIPv6: (router) ->
+            router.send(net.isIPv6(router.req.params.ip))
 }
