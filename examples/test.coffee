@@ -1,4 +1,4 @@
-API = require '../src/API'
+API = require 'sys-api'
 
 api = new API({
     #'plugins.root' : '/plugins/'

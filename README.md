@@ -1,19 +1,102 @@
 # sys-api
-A modular System-API for Linux - written in Coffeescript, based on NodeJS and RestifyJS
+A modular System-API for Linux - based on NodeJS and RestifyJS.
 
-### Restify-functions
-Restify-functions are core-features, thus hardcoded.
-Each function represents an actual restifyJS-plugin (http://mcavage.me/node-restify/#bundled-plugins)
+It is written in Coffeescript, but compiled .js files are included.
 
-####Available functions:
-+ Authorization (with custom bcrypt-handler)
+That means you can use it with and without coffee.
+
+####Features:
++ Authorization (with bcrypt-handler)
 + CORS
 + BodyParser
-+ Extensive Routing
++ Extensive routing
++ Addons (extend sys-api' core)
++ Plugins (extend your api)
+
 
 ### Routing
 There are tons of routing-variations!
-Check the wiki: https://github.com/Cloud2Box/sys-api/wiki/Routing
+
+For example, this is how simple a route can be:
+
+```coffeescript
+api.get('/hello', "Hello World")
+#=> {"response":"Hello World"}
+```
+
+Check the wiki for more: https://github.com/Cloud2Box/sys-api/wiki/Routing
+
+### Authorization
+Such as Restify, currently only HTTP Basic Auth and HTTP Signature are supported.
+
+```coffeescript
+api.auth({
+    enabled: true,
+    method: 'basic',
+    bcrypt: false,
+    users: {
+        testuser: {
+            password: 'testpw'
+        }   
+    }
+})
+```
+
+if bcrypt is enabled, you will have to post an encrypted hash with your route.
+
+### CORS (Cross-Origin Resource Sharing)
+```coffeescript
+api.cors({
+    enabled: true,
+    settings: {
+        origins: ['https://foo.com', 'http://bar.com'],  # defaults to ['*']
+        credentials: true,  # defaults to false
+        headers: ['x-foo']  # sets expose-headers
+    }
+})
+```
+
+### BodyParser
+The BodyParser can be enabled with one option.
+Everything else is handled internally for you.
+Once enabled, you can access the body with obj.req.body in your routes.
+
+Check: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee#L53
+
+```coffeescript
+api.bodyParser({
+    enabled: true
+})
+```
+
+If you want to change more settings of the BodyParser, simply pass an settings-object:
+
+```coffeescript
+api.bodyParser({
+    enabled: true,
+    settings: {
+        maxBodySize: 0,
+        mapParams: true,
+        mapFiles: false,
+        overrideParams: false,
+        multipartHandler: function(part) {
+            part.on('data', function(data) {
+                # do something with the multipart data
+            });
+        },
+        multipartFileHandler: function(part) {
+            part.on('data', function(data) {
+                #do something with the multipart file data
+            });
+        },
+        keepExtensions: false,
+        uploadDir: os.tmpdir(),
+        multiples: true
+        hash: 'sha1'
+    }
+})
+```
+
 
 ### Core-Addons
 Core-Addons are bound to the API and can be maintained from within an external file.

@@ -15,7 +15,6 @@ Addons = [
 ]
     
 class API extends ClassHelper
-    
     # Include and expose Core-Addons
     for addon, index in Addons
         @extend(require(addon))
