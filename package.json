@@ -1,10 +1,10 @@
 {
   "name": "sys-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "bugs": {
     "url": "https://github.com/Cloud2Box/sys-api/issues"
   },
-  "description": "A modular System-API for Linux - written in Coffeescript, based on NodeJS and RestifyJS",
+  "description": "A modular System-API for Linux, based on RestifyJS",
   "keywords": [
     "api",
     "system",
