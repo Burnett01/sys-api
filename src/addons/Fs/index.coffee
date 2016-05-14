@@ -2,7 +2,8 @@ fs   = require 'fs'
 path = require 'path'
 
 module.exports = {
-    fs:     
+    fs: 
+        fs: fs    
         path: path
         
         readFile: (path, cb) ->

@@ -1,24 +1,31 @@
 {
   "name": "sys-api",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "bugs": {
     "url": "https://github.com/Cloud2Box/sys-api/issues"
   },
-  "description": "A modular System-API for Linux, based on RestifyJS",
+  "description": "A modular System-API, based on RestifyJS",
   "keywords": [
     "api",
     "system",
     "modular",
     "addons",
     "plugins",
+    "javascript",
     "coffescript",
     "node",
     "restifyjs",
-    "authentication"
+    "http",
+    "https",
+    "logger",
+    "lightweight",
+    "authentication",
+    "linux",
+    "windows"
   ],
   "author": {
-    "name": "Steven A",
-    "email": "s-8@posteo.mx",
+    "name": "Cloud2Box - IT Dienstleistungen",
+    "email": "info@cloud2box.net",
     "url": "https://github.com/Cloud2Box/sys-api"
   },
   "main": "./src/API",
@@ -27,7 +34,8 @@
     "url": "https://github.com/Cloud2Box/sys-api"
   },
   "dependencies": {
+    "restify": "*",
     "bcryptjs": "*",
-    "restify": "*"
+    "morgan": "*"
   }
 }

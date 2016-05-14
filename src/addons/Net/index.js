@@ -4,6 +4,7 @@ net = require('net');
 
 module.exports = {
   net: {
+    net: net,
     isIP: function(router) {
       return router.send(net.isIP(router.req.params.ip));
     },

@@ -6,6 +6,7 @@ path = require('path');
 
 module.exports = {
   fs: {
+    fs: fs,
     path: path,
     readFile: function(path, cb) {
       return fs.readFile(path, 'utf8', function(err, data) {
