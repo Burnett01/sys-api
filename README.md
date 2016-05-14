@@ -1,30 +1,47 @@
 # sys-api
-A modular System-API for Linux - based on NodeJS and RestifyJS.
+A modular System-API for NodeJS - RestifyJS.
 
 It is written in Coffeescript, but compiled .js files are included.
-
-That means you can use it with and without coffee.
+Thus you can use it with or without coffeescript.
 
 ####Features:
 + Authorization (with bcrypt-handler)
 + CORS
++ HTTP/S
 + BodyParser
 + Extensive routing
-+ Addons (extend sys-api' core)
++ Logging (morgan/custom)
 + Plugins (extend your api)
++ Addons (extend sys-api' core)
 
+---
 
 ### Routing
 There are tons of routing-variations!
 
-For example, this is how simple a route can be:
+For example, this is how simple it can be:
 
 ```coffeescript
 api.get('/hello', "Hello World")
 #=> {"response":"Hello World"}
 ```
+```coffeescript
+api.get('/hello', (router) ->
+    router.send("Hello World")
+)
+#=> {"response":"Hello World"}
+```
+```coffeescript
+api.get('/hello', (router) ->
+    router.res.send("Hello World")
+    return router.next()
+)
+#=> "Hello World"
+```
 
 Check the wiki for more: https://github.com/Cloud2Box/sys-api/wiki/Routing
+
+---
 
 ### Authorization
 Such as Restify, currently only HTTP Basic Auth and HTTP Signature are supported.
@@ -42,7 +59,9 @@ api.auth({
 })
 ```
 
-if bcrypt is enabled, you will have to post an encrypted hash with your route.
+> if bcrypt is enabled, pass an encrypted hash with your route.
+
+---
 
 ### CORS (Cross-Origin Resource Sharing)
 ```coffeescript
@@ -55,6 +74,28 @@ api.cors({
     }
 })
 ```
+
+---
+
+### HTTP/S
+This API supports HTTP and HTTPS at the same time.
+
+You don't have to set up things twice. Simply pass a key and certificate property,
+and the API will handle that for you. Once configured, your API-instance will listen to your specified HTTP port and the HTTPS port (443).
+
+```coffeescript
+api = new API({
+    restify: {
+        key: readFileSync('localhost.key'),
+        certificate: readFileSync('localhost.cert')
+    }
+})
+api.connect(80)
+```
+
+> If no key/certificate property is available, your API-instance won't listen to HTTPS.
+
+---
 
 ### BodyParser
 The BodyParser can be enabled with one option.
@@ -97,24 +138,41 @@ api.bodyParser({
 })
 ```
 
-
-### Core-Addons
-Core-Addons are bound to the API and can be maintained from within an external file.
-As of now there are three Core-Addons available (FS, OS, NET), but you can create you own.
-Check out the wiki for instructions: https://github.com/Burnett01/sys-api/wiki/Create-an-Addon-(core)
-
-Once you've finished your addon, please submit a pull-request. If it's useful, it'll be added.
+---
 
 ### Plugins
-That's right! As of version 0.2.0 you can create your own plugins apart from Core-Addons.
+As of version 0.2.0 you can create your own plugins apart from Core-Addons.
 This allows you to extend your API without changing Sys-API's source.
 
-Check out: https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
+Plugins can also act like middlware:
+```coffeescript
+api = new API({
+    'plugins.root' : '/home/plugins'
+    'plugins.autoload' : true
+})
+
+api.get('/myplugin/test', api.myplugin.test)
+
+api.connect(8000)
+```
+
+Check out: https://github.com/Cloud2Box/sys-api/wiki/Create-a-plugin
+Check out: https://github.com/Cloud2Box/sys-api/wiki/Routing
+
+### Core-Addons
+Core-Addons are bound to the API and core-features. Such as plugins, they can be maintained from within an external file.
+As of now there are three Core-Addons available (FS, OS, NET) but you can create you own.
+They can also act like middleware.
+
+Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/Create-an-Addon-(core)
+
+> Once you've finished your addon, please submit a pull-request. If it's useful, it'll be added.
 
 
-####Demo / Example:
-https://github.com/Burnett01/sys-api/blob/master/examples/test.coffee
+
+####Demos / Examples:
+https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
+https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
 
 ##How to install:
-Just use `npm install sys-api` and copy the demo-file in the examples folder into your main-index. 
-Edit the demo-file and run the api.
+Just use `npm install sys-api` and copy the content of the demo-file. 

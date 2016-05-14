@@ -1,12 +1,12 @@
 API = require 'sys-api'
 
 api = new API({
-    #'plugins.root' : '/plugins/'
+    #'plugins.root' : ['/plugins/', '/home/user/plugins/']
     #'plugins.autoload' : true,
+    #'logger' : 'dev'
 })
 
-# Check https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
-# optionally pass an object to restify's createServer-function
+# Optionally pass an object to restify's createServer-function
 # http://restify.com/#creating-a-server
 # example:  api = new API({ restify: { name: 'MyApp' } })
 

@@ -1,138 +1,166 @@
-##################################
-#   SYS-API (c) 2016- Burnett
-##################################
+###############################################
+#             SYS-API
+#  @Description: A modular System-API
+#  @Author: (c) Cloud2Box IT-Dienstleistungen
+#  @Website: www.cloud2box.net
+###############################################
 
-restify = require 'restify'
-bcrypt  = require 'bcryptjs';
+RESTIFY = require 'restify'
+BCRYPT  = require 'bcryptjs';
+MORGAN  = require 'morgan'
 
 ClassHelper = require './ClassHelper'
+PluginHelper = require './PluginHelper'
 
-# Define Core-Addons
+# Core-Addons definition
 Addons = [
     "./addons/Fs",
     "./addons/Os",
     "./addons/Net"
 ]
-    
+
 class API extends ClassHelper
+
+    # Extend restify-errors
+    @extend({ error: RESTIFY.errors })
+    
     # Include and expose Core-Addons
     for addon, index in Addons
         @extend(require(addon))
         @include(require(addon))
-
-    @extend({ error: restify.errors})
     
-    # Plugin-Handler
-    plugins =
-        registerAll: (root) ->
-            console.log "Loading plugins.."
-            
-            API.fs.readDir(root, true, (err, files) ->
-                if err then return console.log(err)
-                for file, index in files
-                    console.log "[LOADED] plugin-" + file
-                    API.include(require(file))
-            )
+    # Extend PluginHelper
+    @extend(PluginHelper)
 
 
     constructor: (options) ->
         @options = options
-
+        
         if(typeof @options['restify'] == undefined)
             @options.restify = {}
-            
-        @server = new restify.createServer(@options.restify);
         
+        # Clone the options.restify property and remove ssl settings
+        @options._restify = Object.assign({}, @options.restify)
+        delete @options._restify.key
+        delete @options._restify.certificate
+        
+        # Define an array for the RESTIFY.createServer instances
+        @instances = []
+        
+        # Create a server with the cloned-object (without ssl settings)
+        @instances.push(new RESTIFY.createServer(@options._restify))
+        
+        # Check whether our original options.restify object contains ssl settings
+        if('key' of @options.restify and 'certificate' of @options.restify)
+            instance = new RESTIFY.createServer(@options.restify)
+            instance.server.ssl = true
+            @instances.push(instance)
+            
+        # Define a wrapper function, which runs any restify-method-function on all instances
+        @server = (type, args...) =>
+            for instance in @instances
+                instance[type].apply(instance, args)
+        
+        # Check whether logger should be used
+        if('logger' of @options)        
+            @server('use', MORGAN(@options['logger']))        
+             
+        # Check whether plugins should be loaded
         if('plugins.root' of @options)
             if('plugins.autoload' of @options && @options['plugins.autoload'] == true)
-                plugins.registerAll(@options['plugins.root'])
-       
+                API.plugins().setup(@options['plugins.root'])
+
 
     connect: (port) ->
-        @server.listen port, () ->
-            console.log('API listening on port %d', port);
-        
+        for instance in @instances
+            ((port) ->
+                port = if instance.server.ssl then 443 else port
+                instance.listen port, () ->
+                    console.log('API listening on port %d', port)
+            )(port)
+
+    
+    ########  API PLUGINS  ########
+    
     auth: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
-            @server.use(restify.authorizationParser())
+            @server("use", RESTIFY.authorizationParser())
             
             if options.method == 'basic' || options.hasOwnProperty('users')
                 users = options.users
                 
-                @server.use((req, res, next) ->
-                    
+                @server("use", (req, res, next) ->
                     if req.username == 'anonymous' || !users[req.username]
-                        next(new restify.NotAuthorizedError())
+                        next(new API.error.NotAuthorizedError())
 
                     if options.bcrypt == true
-                    
-                        _hash = req.authorization.basic.password.replace('$2y$', '$2a$'); #fix for php-blowfish-hashes
+                        #fix for php-blowfish-hashes
+                        _hash = req.authorization.basic.password.replace('$2y$', '$2a$')
     
-                        bcrypt.compare(users[req.username].password, _hash, (err, valid) ->
-                            
-                            if valid == true then return next() else next(new restify.NotAuthorizedError())
+                        BCRYPT.compare(users[req.username].password, _hash, (err, valid) ->
+                            if valid == true then return next() else next(new API.error.NotAuthorizedError())
                         )
                         
                     else
-                        
-                        if req.authorization.basic.password == users[req.username].password then return next() else next(new restify.NotAuthorizedError())
+                        if req.authorization.basic.password == users[req.username].password
+                            return next()
+                        else
+                            next(new API.error.NotAuthorizedError())
                 )
-
-    # Restify Plugins
 
     cors: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
-            @server.use(restify.CORS(options.settings))
+            @server("use", RESTIFY.CORS(options.settings))
             
     bodyParser: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
-            @server.use(restify.bodyParser(options.settings))
-    
-    error: (message) ->
-        new restify.errors.InternalServerError()
+            @server("use", RESTIFY.bodyParser(options.settings))
     
 
-    # Internal Functions
+    ########  API Internal Functions  ########
     
     _response = (req, res, next, data) ->
         res.send({ response: data })
-        return next()
+        next()
       
-    _request = (callback, req, res, next, args) ->
-        if typeof callback is 'string' or typeof callback is 'object'
-            _response(req, res, next, callback)
-            
-        else if typeof callback is 'function'
-            return callback.apply(null, [{ req:req, res:res, next:next, send: (response) -> 
-                _response(req, res, next, response)
-            }].concat(args));
-        else
-            next(new restify.errors.InternalServerError(typeof callback + " is not a valid callback-method!"))
-            
+    _request = (callbacks, req, res, next) ->
+        if typeof callbacks[0] is 'string' or typeof callbacks[0] is 'object'
+            return _response(req, res, next, callbacks[0])
+
+        if callbacks.length
+            for callback in callbacks
+                callback.apply(null, [{ req:req, res:res, next:next, send: (response) -> 
+                    _response(req, res, next, response)
+                }]);
     
-    # More Methods
+    
+    ########  API HTTP-METHODS  ########
+    #-> Forward HTTP-Methods to internal _request
     
     head: (path, cb) ->
-      @server.head(path, (req, res, next) -> 
+      @server("head", path, (req, res, next) -> 
         _request(cb, req, res, next)
       )
   
-    get: (path, cb, args...) ->
-      @server.get(path, (req, res, next) -> 
-        _request(cb, req, res, next, args)
+    get: (path, cb...) ->
+      @server("get", path, (req, res, next) -> 
+        _request(cb, req, res, next)
       )
       
     post: (path, cb) ->
-      @server.post(path, (req, res, next) -> 
+      @server("post", path, (req, res, next) -> 
         _request(cb, req, res, next)
       )
 
         
-
+    ########  Export the instances  ########
+    instances: @instances
+    
+    
 module.exports = API
