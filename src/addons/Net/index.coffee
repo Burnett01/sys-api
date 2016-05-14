@@ -2,6 +2,8 @@ net = require 'net'
 
 module.exports = {
     net:
+        net: net
+        
         isIP: (router) ->
             router.send(net.isIP(router.req.params.ip))
             

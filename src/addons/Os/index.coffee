@@ -4,6 +4,8 @@ Fs      = require '../Fs'
 
 module.exports = {
     os:
+        os: os
+    
         system:
             hostname: () ->
                 os.hostname()
