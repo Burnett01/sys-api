@@ -36,8 +36,10 @@ class API extends ClassHelper
     constructor: (options) ->
         @options = options
         
-        if(typeof @options['restify'] == undefined)
-            @options.restify = {}
+        @options.restify = {}
+        
+        if(typeof @options['restify'] != undefined)
+            @options.restify = @options.restify
         
         # Clone the options.restify property and remove ssl settings
         @options._restify = Object.assign({}, @options.restify)
