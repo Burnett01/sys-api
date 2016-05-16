@@ -144,7 +144,7 @@ api.bodyParser({
 As of version 0.2.0 you can create your own plugins apart from Core-Addons.
 This allows you to extend your API without changing Sys-API's source.
 
-Plugins can also act like middlware:
+Plugins can also act as middlware:
 ```coffeescript
 api = new API({
     'plugins.root' : '/home/plugins'
@@ -157,12 +157,13 @@ api.connect(8000)
 ```
 
 Check out: https://github.com/Cloud2Box/sys-api/wiki/Create-a-plugin
+
 Check out: https://github.com/Cloud2Box/sys-api/wiki/Routing
 
 ### Core-Addons
 Core-Addons are bound to the API and core-features. Such as plugins, they can be maintained from within an external file.
 As of now there are three Core-Addons available (FS, OS, NET) but you can create you own.
-They can also act like middleware.
+They can also act as middleware.
 
 Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/Create-an-Addon-(core)
 
@@ -172,6 +173,7 @@ Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/C
 
 ####Demos / Examples:
 https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
+
 https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
 
 ##How to install:
