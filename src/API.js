@@ -172,7 +172,9 @@ API = (function(superClass) {
     }
   };
 
-  API.prototype.head = function(path, cb) {
+  API.prototype.head = function() {
+    var cb, path;
+    path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
     return this.server("head", path, function(req, res, next) {
       return _request(cb, req, res, next);
     });
@@ -186,10 +188,24 @@ API = (function(superClass) {
     });
   };
 
-  API.prototype.post = function(path, cb) {
+  API.prototype.post = function() {
+    var cb, path;
+    path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
     return this.server("post", path, function(req, res, next) {
       return _request(cb, req, res, next);
     });
+  };
+
+  API.prototype.put = function() {
+    var cb, path;
+    path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+    return this.server("put", path, function(req, res, next) {}, _request(cb, req, res, next));
+  };
+
+  API.prototype.del = function() {
+    var cb, path;
+    path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+    return this.server("del", path, function(req, res, next) {}, _request(cb, req, res, next));
   };
 
   API.prototype.instances = API.instances;

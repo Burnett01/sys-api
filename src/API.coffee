@@ -145,7 +145,7 @@ class API extends ClassHelper
     ########  API HTTP-METHODS  ########
     #-> Forward HTTP-Methods to internal _request
     
-    head: (path, cb) ->
+    head: (path, cb...) ->
       @server("head", path, (req, res, next) -> 
         _request(cb, req, res, next)
       )
@@ -155,11 +155,20 @@ class API extends ClassHelper
         _request(cb, req, res, next)
       )
       
-    post: (path, cb) ->
+    post: (path, cb...) ->
       @server("post", path, (req, res, next) -> 
         _request(cb, req, res, next)
       )
-
+      
+    put: (path, cb...) ->
+        @server("put", path, (req, res, next) -> 
+        _request(cb, req, res, next)
+        )
+              
+    del: (path, cb...) ->
+        @server("del", path, (req, res, next) -> 
+        _request(cb, req, res, next)
+        )
         
     ########  Export the instances  ########
     instances: @instances
