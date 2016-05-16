@@ -2,20 +2,7 @@ var API, api;
 
 API = require('sys-api');
 
-api = new API({
-    //'plugins.root' : '/plugins/'
-    //'plugins.autoload' : true,
-});
-
-// Check https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
-// optionally pass an object to restify's createServer-function
-// http://restify.com/#creating-a-server
-// example:  api = new API({ restify: { name: 'MyApp' } })
-
-
-// ´´´´´´´ SETUP ´´´´´´´
-
-// => Authorization
+api = new API({});
 
 api.auth({
   enabled: false,

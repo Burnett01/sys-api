@@ -35,8 +35,9 @@ API = (function(superClass) {
   function API(options) {
     var instance;
     this.options = options;
-    if (typeof this.options['restify'] === void 0) {
-      this.options.restify = {};
+    this.options.restify = {};
+    if (typeof this.options['restify'] !== void 0) {
+      this.options.restify = this.options.restify;
     }
     this.options._restify = Object.assign({}, this.options.restify);
     delete this.options._restify.key;
