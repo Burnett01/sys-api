@@ -8,3 +8,4 @@ Vagrantfile
 /testus
 .gitignore
 /dev
+/deb
