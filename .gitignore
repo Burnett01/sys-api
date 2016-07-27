@@ -9,3 +9,5 @@ Vagrantfile
 .gitignore
 /dev
 /deb
+.browse.VC.db
+.browse.VC.db-wal

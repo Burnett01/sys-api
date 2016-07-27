@@ -81,7 +81,8 @@ api.cors({
 This API supports HTTP and HTTPS at the same time.
 
 You don't have to set up things twice. Simply pass a key and certificate property,
-and the API will handle that for you. Once configured, your API-instance will listen to your specified HTTP port and the HTTPS port (443).
+and the API will handle that for you. Once configured, your API-instance will listen to your specified HTTP and HTTPS port.
+Port 443 is the default port for HTTPS. If you wish to use any other port, simply pass a second argument to ```connect()```.
 
 ```coffeescript
 api = new API({
@@ -90,7 +91,12 @@ api = new API({
         certificate: readFileSync('localhost.cert')
     }
 })
-api.connect(80)
+
+api.connect(80) #API is going to listen on HTTP(80) and HTTPS(443)
+
+# OR
+
+api.connect(80, 8443) #API is going to listen on HTTP(80) and HTTPS(8443)
 ```
 
 > If no key/certificate property is available, your API-instance won't listen to HTTPS.

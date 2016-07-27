@@ -1,3 +1,27 @@
+
+/*
+The MIT License (MIT)
+
+Product:      C2B System API (SysAPI)
+Description:  A modular System-API for NodeJS - RestifyJS
+
+Copyright (c) 2015-2016 Cloud2Box - IT Dienstleistungen <info@cloud2box.net>
+              2015-2016 Steven Agyekum <s-8@posteo.mx>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 var API, Addons, BCRYPT, ClassHelper, MORGAN, PluginHelper, RESTIFY,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty,
@@ -35,9 +59,10 @@ API = (function(superClass) {
   function API(options) {
     var instance;
     this.options = options;
-    this.options.restify = {};
-    if (typeof this.options['restify'] !== void 0) {
+    if (this.options['restify'] != null) {
       this.options.restify = this.options.restify;
+    } else {
+      this.options.restify = {};
     }
     this.options._restify = Object.assign({}, this.options.restify);
     delete this.options._restify.key;
@@ -46,7 +71,7 @@ API = (function(superClass) {
     this.instances.push(new RESTIFY.createServer(this.options._restify));
     if ('key' in this.options.restify && 'certificate' in this.options.restify) {
       instance = new RESTIFY.createServer(this.options.restify);
-      instance.server.ssl = true;
+      instance.server.tls = true;
       this.instances.push(instance);
     }
     this.server = (function(_this) {
@@ -72,18 +97,19 @@ API = (function(superClass) {
     }
   }
 
-  API.prototype.connect = function(port) {
+  API.prototype.connect = function(http, https) {
     var instance, j, len1, ref, results;
     ref = this.instances;
     results = [];
     for (j = 0, len1 = ref.length; j < len1; j++) {
       instance = ref[j];
-      results.push((function(port) {
-        port = instance.server.ssl ? 443 : port;
+      results.push((function(http, https) {
+        var port;
+        port = instance.server.tls ? https != null ? https : 443 : http;
         return instance.listen(port, function() {
           return console.log('API listening on port %d', port);
         });
-      })(port));
+      })(http, https));
     }
     return results;
   };

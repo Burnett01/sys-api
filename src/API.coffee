@@ -52,13 +52,13 @@ class API extends ClassHelper
 
     constructor: (options) ->
         @options = options
-        
-        @options.restify = {}
-        
-        if(typeof @options['restify'] != undefined)
+
+        if @options['restify']?
             @options.restify = @options.restify
-        
-        # Clone the options.restify property and remove ssl settings
+        else
+            @options.restify = {}
+
+        # Clone the options.restify property and remove tls settings
         @options._restify = Object.assign({}, @options.restify)
         delete @options._restify.key
         delete @options._restify.certificate
@@ -66,13 +66,13 @@ class API extends ClassHelper
         # Define an array for the RESTIFY.createServer instances
         @instances = []
         
-        # Create a server with the cloned-object (without ssl settings)
+        # Create a server with the cloned-object (without tls settings)
         @instances.push(new RESTIFY.createServer(@options._restify))
         
-        # Check whether our original options.restify object contains ssl settings
-        if('key' of @options.restify and 'certificate' of @options.restify)
+        # Check whether our original options.restify object contains tls settings
+        if 'key' of @options.restify and 'certificate' of @options.restify
             instance = new RESTIFY.createServer(@options.restify)
-            instance.server.ssl = true
+            instance.server.tls = true
             @instances.push(instance)
             
         # Define a wrapper function, which runs any restify-method-function on all instances
@@ -81,22 +81,26 @@ class API extends ClassHelper
                 instance[type].apply(instance, args)
         
         # Check whether logger should be used
-        if('logger' of @options)        
+        if 'logger' of @options        
             @server('use', MORGAN(@options['logger']))        
              
         # Check whether plugins should be loaded
-        if('plugins.root' of @options)
-            if('plugins.autoload' of @options && @options['plugins.autoload'] == true)
+        if 'plugins.root' of @options
+            if 'plugins.autoload' of @options && @options['plugins.autoload'] == true
                 API.plugins().setup(@options['plugins.root'])
 
 
-    connect: (port) ->
+    connect: (http, https) ->
         for instance in @instances
-            ((port) ->
-                port = if instance.server.ssl then 443 else port
+            ((http, https) ->
+                port = 
+                    if instance.server.tls
+                        if https? then https else 443 
+                    else http
+
                 instance.listen port, () ->
                     console.log('API listening on port %d', port)
-            )(port)
+            )(http, https)
 
     
     ########  API PLUGINS  ########
