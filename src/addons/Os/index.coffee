@@ -42,12 +42,7 @@ module.exports = {
                 
             networkInterfaces: () ->
                 os.networkInterfaces()
-                
-            netfilter:
-                ip_conntrack_count: (cb) ->
-                    Fs.fs.readFile("/proc/sys/net/ipv4/netfilter/ip_conntrack_count", (err, data) ->
-                        cb(err, data)
-                    )
+
         users:
             all: (cb) ->
                 pwdg.getAllUsers((err, users) ->

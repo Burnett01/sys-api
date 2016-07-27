@@ -45,13 +45,6 @@ module.exports = {
       },
       networkInterfaces: function() {
         return os.networkInterfaces();
-      },
-      netfilter: {
-        ip_conntrack_count: function(cb) {
-          return Fs.fs.readFile("/proc/sys/net/ipv4/netfilter/ip_conntrack_count", function(err, data) {
-            return cb(err, data);
-          });
-        }
       }
     },
     users: {
