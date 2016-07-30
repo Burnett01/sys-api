@@ -76,13 +76,21 @@ API = (function(superClass) {
     }
     this.server = (function(_this) {
       return function() {
-        var args, j, len1, ref, results, type;
-        type = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+        var args, j, k, len1, notls, ref, results, type;
+        type = arguments[0], args = 3 <= arguments.length ? slice.call(arguments, 1, j = arguments.length - 1) : (j = 1, []), notls = arguments[j++];
         ref = _this.instances;
         results = [];
-        for (j = 0, len1 = ref.length; j < len1; j++) {
-          instance = ref[j];
-          results.push(instance[type].apply(instance, args));
+        for (k = 0, len1 = ref.length; k < len1; k++) {
+          instance = ref[k];
+          if ((instance.server.tls != null) && typeof notls === 'boolean' && notls === true) {
+            continue;
+          }
+          if (typeof notls === 'function') {
+            args.push(notls);
+            results.push(instance[type].apply(instance, args));
+          } else {
+            results.push(void 0);
+          }
         }
         return results;
       };
@@ -112,6 +120,14 @@ API = (function(superClass) {
       })(http, https));
     }
     return results;
+  };
+
+  API.prototype.pre = function(fn) {
+    return this.server("pre", fn);
+  };
+
+  API.prototype.use = function(fn) {
+    return this.server("use", fn);
   };
 
   API.prototype.auth = function(options) {
@@ -164,6 +180,78 @@ API = (function(superClass) {
     };
     if (options.enabled === true) {
       return this.server("use", RESTIFY.bodyParser(options.settings));
+    }
+  };
+
+  API.prototype.acceptParser = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.acceptParser(options.settings));
+    }
+  };
+
+  API.prototype.dateParser = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.dateParser(options.settings));
+    }
+  };
+
+  API.prototype.queryParser = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.queryParser(options.settings));
+    }
+  };
+
+  API.prototype.jsonp = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.jsonp(options.settings));
+    }
+  };
+
+  API.prototype.gzipResponse = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.gzipResponse(options.settings), true);
+    }
+  };
+
+  API.prototype.requestExpiry = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.requestExpiry(options.settings));
+    }
+  };
+
+  API.prototype.throttle = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.throttle(options.settings));
+    }
+  };
+
+  API.prototype.conditionalRequest = function(options) {
+    options = options || {
+      enabled: false
+    };
+    if (options.enabled === true) {
+      return this.server("use", RESTIFY.conditionalRequest(options.settings));
     }
   };
 
@@ -225,13 +313,17 @@ API = (function(superClass) {
   API.prototype.put = function() {
     var cb, path;
     path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-    return this.server("put", path, function(req, res, next) {}, _request(cb, req, res, next));
+    return this.server("put", path, function(req, res, next) {
+      return _request(cb, req, res, next);
+    });
   };
 
   API.prototype.del = function() {
     var cb, path;
     path = arguments[0], cb = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-    return this.server("del", path, function(req, res, next) {}, _request(cb, req, res, next));
+    return this.server("del", path, function(req, res, next) {
+      return _request(cb, req, res, next);
+    });
   };
 
   API.prototype.instances = API.instances;

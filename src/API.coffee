@@ -76,9 +76,14 @@ class API extends ClassHelper
             @instances.push(instance)
             
         # Define a wrapper function, which runs any restify-method-function on all instances
-        @server = (type, args...) =>
+        @server = (type, args..., notls) =>
             for instance in @instances
-                instance[type].apply(instance, args)
+                if instance.server.tls? and typeof notls == 'boolean' and notls == true
+                    continue
+                if typeof notls == 'function'
+                    args.push(notls)
+                    instance[type].apply(instance, args)
+                    
         
         # Check whether logger should be used
         if 'logger' of @options        
@@ -89,6 +94,8 @@ class API extends ClassHelper
             if 'plugins.autoload' of @options && @options['plugins.autoload'] == true
                 API.plugins().setup(@options['plugins.root'])
 
+
+    ########  API Methods  ########
 
     connect: (http, https) ->
         for instance in @instances
@@ -102,8 +109,14 @@ class API extends ClassHelper
                     console.log('API listening on port %d', port)
             )(http, https)
 
+    pre: (fn) ->
+        @server("pre", fn)
+
+    use: (fn) ->
+        @server("use", fn)
+
     
-    ########  API PLUGINS  ########
+    ########  Bundled API Plugins  ########
     
     auth: (options) ->
         options = options || { enabled: false }
@@ -144,7 +157,56 @@ class API extends ClassHelper
         
         if options.enabled == true
             @server("use", RESTIFY.bodyParser(options.settings))
-    
+
+    acceptParser: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.acceptParser(options.settings))
+
+    dateParser: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.dateParser(options.settings))
+
+    queryParser: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.queryParser(options.settings))
+
+    jsonp: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.jsonp(options.settings))
+
+    gzipResponse: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.gzipResponse(options.settings), true)
+
+    requestExpiry: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.requestExpiry(options.settings))
+
+    throttle: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.throttle(options.settings))
+
+    conditionalRequest: (options) ->
+        options = options || { enabled: false }
+        
+        if options.enabled == true
+            @server("use", RESTIFY.conditionalRequest(options.settings))
+
+
 
     ########  API Internal Functions  ########
     
@@ -167,31 +229,31 @@ class API extends ClassHelper
     #-> Forward HTTP-Methods to internal _request
     
     head: (path, cb...) ->
-      @server("head", path, (req, res, next) -> 
-        _request(cb, req, res, next)
-      )
+        @server("head", path, (req, res, next) -> 
+            _request(cb, req, res, next)
+        )
   
     get: (path, cb...) ->
-      @server("get", path, (req, res, next) -> 
-        _request(cb, req, res, next)
-      )
+        @server("get", path, (req, res, next) -> 
+            _request(cb, req, res, next)
+        )
       
     post: (path, cb...) ->
-      @server("post", path, (req, res, next) -> 
-        _request(cb, req, res, next)
-      )
+        @server("post", path, (req, res, next) -> 
+            _request(cb, req, res, next)
+        )
       
     put: (path, cb...) ->
         @server("put", path, (req, res, next) -> 
-        _request(cb, req, res, next)
+            _request(cb, req, res, next)
         )
               
     del: (path, cb...) ->
         @server("del", path, (req, res, next) -> 
-        _request(cb, req, res, next)
+            _request(cb, req, res, next)
         )
         
-    ########  Export the instances  ########
+    ########  Export all instances  ########
     instances: @instances
     
     
