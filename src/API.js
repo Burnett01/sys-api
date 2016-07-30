@@ -85,7 +85,7 @@ API = (function(superClass) {
           if ((instance.server.tls != null) && typeof notls === 'boolean' && notls === true) {
             continue;
           }
-          if (typeof notls === 'function') {
+          if (typeof notls !== 'boolean') {
             args.push(notls);
             results.push(instance[type].apply(instance, args));
           } else {

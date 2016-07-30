@@ -80,7 +80,7 @@ class API extends ClassHelper
             for instance in @instances
                 if instance.server.tls? and typeof notls == 'boolean' and notls == true
                     continue
-                if typeof notls == 'function'
+                if typeof notls != 'boolean'
                     args.push(notls)
                     instance[type].apply(instance, args)
                     
