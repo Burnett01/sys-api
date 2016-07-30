@@ -1,6 +1,6 @@
 {
   "name": "sys-api",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "bugs": {
     "url": "https://github.com/Cloud2Box/sys-api/issues"
   },
@@ -21,7 +21,13 @@
     "lightweight",
     "authentication",
     "linux",
-    "windows"
+    "windows",
+    "gzip",
+    "compression",
+    "cors",
+    "query",
+    "router",
+    "routing"
   ],
   "author": {
     "name": "Cloud2Box - IT Dienstleistungen",

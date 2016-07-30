@@ -9,6 +9,13 @@ Thus you can use it with or without coffeescript.
 + CORS
 + HTTP/S
 + BodyParser
++ AcceptParser
++ DateParser
++ QueryParser
++ Jsonp
++ GzipResponse
++ Throttle
++ ConditionalRequest
 + Extensive routing
 + Logging (morgan/custom)
 + Plugins (extend your api)
@@ -144,7 +151,6 @@ api.bodyParser({
 })
 ```
 
----
 
 ### Plugins
 As of version 0.2.0 you can create your own plugins apart from Core-Addons.
