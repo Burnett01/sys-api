@@ -275,9 +275,15 @@ API = (function(superClass) {
           {
             req: req,
             res: res,
-            next: next,
-            send: function(response) {
-              return _response(req, res, next, response);
+            next: function(data) {
+              if (data != null) {
+                return next(data);
+              } else {
+                return next;
+              }
+            },
+            send: function(data) {
+              return _response(req, res, next, data);
             }
           }
         ]));

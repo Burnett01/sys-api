@@ -217,12 +217,15 @@ class API extends ClassHelper
     _request = (callbacks, req, res, next) ->
         if typeof callbacks[0] is 'string' or typeof callbacks[0] is 'object'
             return _response(req, res, next, callbacks[0])
-
+        
         if callbacks.length
             for callback in callbacks
-                callback.apply(null, [{ req:req, res:res, next:next, send: (response) -> 
-                    _response(req, res, next, response)
-                }]);
+                callback.apply(null, [{ 
+                    req: req
+                    res: res 
+                    next: (data) -> if data? then next(data) else next
+                    send: (data) -> _response(req, res, next, data)
+                }])
     
     
     ########  API HTTP-METHODS  ########
