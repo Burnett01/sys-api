@@ -4,6 +4,9 @@ A modular System-API for NodeJS - RestifyJS.
 It is written in Coffeescript, but compiled .js files are included.
 Thus you can use it with or without coffeescript.
 
+[![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api)
+---
+
 ####Features:
 + Authorization (with bcrypt-handler)
 + CORS
