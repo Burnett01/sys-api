@@ -47,6 +47,7 @@ api.get('/hello', (router) ->
     return router.next()
 )
 #=> "Hello World"
+```
 
 OR use an object:
 
