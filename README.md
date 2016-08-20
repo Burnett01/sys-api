@@ -44,6 +44,12 @@ api.get('/hello', (router) ->
     return router.next()
 )
 #=> "Hello World"
+
+OR use an object:
+
+```coffeescript
+api.get({ url: '/hello' }, "Hello World")
+#=> {"response":"Hello World"}
 ```
 
 Check the wiki for more: https://github.com/Cloud2Box/sys-api/wiki/Routing
