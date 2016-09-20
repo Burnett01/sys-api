@@ -1,6 +1,10 @@
 List of notable changes:
 ---
 
+## 20.09.2016
+
++ (Fixed) In previous versions, the third argument (notls) of the internal server() wrapper did not register bundled-plugins. This is fixed now.
+
 ## 30.07.2016
 
 + Added all restify bundled plugins
