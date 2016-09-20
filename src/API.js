@@ -82,15 +82,14 @@ API = (function(superClass) {
         results = [];
         for (k = 0, len1 = ref.length; k < len1; k++) {
           instance = ref[k];
-          if ((instance.server.tls != null) && typeof notls === 'boolean' && notls === true) {
-            continue;
-          }
-          if (typeof notls !== 'boolean') {
+          if (typeof notls === 'boolean') {
+            if ((instance.server.tls != null) && notls === true) {
+              continue;
+            }
+          } else if (typeof notls !== 'boolean' || notls === false) {
             args.push(notls);
-            results.push(instance[type].apply(instance, args));
-          } else {
-            results.push(void 0);
           }
+          results.push(instance[type].apply(instance, args));
         }
         return results;
       };
