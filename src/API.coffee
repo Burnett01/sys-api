@@ -78,13 +78,14 @@ class API extends ClassHelper
         # Define a wrapper function, which runs any restify-method-function on all instances
         @server = (type, args..., notls) =>
             for instance in @instances
-                if instance.server.tls? and typeof notls == 'boolean' and notls == true
-                    continue
-                if typeof notls != 'boolean'
+                if typeof notls == 'boolean'
+                    if instance.server.tls? and notls == true
+                        continue
+                else if typeof notls != 'boolean' || notls == false
                     args.push(notls)
-                    instance[type].apply(instance, args)
-                    
-        
+                
+                instance[type].apply(instance, args)
+
         # Check whether logger should be used
         if 'logger' of @options        
             @server('use', MORGAN(@options['logger']))        
