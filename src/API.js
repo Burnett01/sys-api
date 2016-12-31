@@ -5,8 +5,8 @@ The MIT License (MIT)
 Product:      C2B System API (SysAPI)
 Description:  A modular System-API for NodeJS - RestifyJS
 
-Copyright (c) 2015-2016 Cloud2Box - IT Dienstleistungen <info@cloud2box.net>
-              2015-2016 Steven Agyekum <s-8@posteo.mx>
+Copyright (c) 2015-2017 Cloud2Box - IT Dienstleistungen <info@cloud2box.net>
+              2015-2017 Steven Agyekum <s-8@posteo.mx>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,
