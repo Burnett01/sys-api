@@ -1,6 +1,11 @@
 List of notable changes:
 ---
 
+## 14.01.2017
+
++ Moved passwd-groups plugin to package.json (dependencies). It is no longer included but available in this project.
+
+
 ## 20.09.2016
 
 + (Fixed) In previous versions, the third argument (notls) of the internal server() wrapper did not register bundled-plugins. This is fixed now.
