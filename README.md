@@ -1,16 +1,16 @@
 # sys-api
-A modular System-API for NodeJS - RestifyJS.
+A modular System-API framework for NodeJS - on top of RestifyJS.
 
-It is written in Coffeescript, but compiled .js files are included.
-Thus you can use it with or without coffeescript.
+It is written in Coffeescript and compiled .js files are included.
+You don't need Coffeescript for it to function.
 
 [![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api)
 ---
 
 ####Features:
-+ Authorization (with bcrypt-handler)
++ Authorization (optional bcrypt)
 + CORS
-+ HTTP/S
++ HTTP/S (TLS)
 + BodyParser
 + AcceptParser
 + DateParser
@@ -95,10 +95,10 @@ api.cors({
 ---
 
 ### HTTP/S
-This API supports HTTP and HTTPS at the same time.
+Sys-API supports HTTP and HTTPS simultaneously.
 
 You don't have to set up things twice. Simply pass a key and certificate property,
-and the API will handle that for you. Once configured, your API-instance will listen to your specified HTTP and HTTPS port.
+and the API will handle that for you. Once configured, your API-instance will listen on your specified HTTP and HTTPS port.
 Port 443 is the default port for HTTPS. If you wish to use any other port, simply pass a second argument to ```connect()```.
 
 ```coffeescript
@@ -121,9 +121,9 @@ api.connect(80, 8443) #API is going to listen on HTTP(80) and HTTPS(8443)
 ---
 
 ### BodyParser
-The BodyParser can be enabled with one option.
-Everything else is handled internally for you.
-Once enabled, you can access the body with obj.req.body in your routes.
+The BodyParser can be enabled with a single option.
+Everything else is handled for you.
+Once enabled, you can access the body with `obj.req.body` in your routes.
 
 Check: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee#L53
 
@@ -133,7 +133,7 @@ api.bodyParser({
 })
 ```
 
-If you want to change more settings of the BodyParser, simply pass an settings-object:
+If you want to change more settings, simply pass an object:
 
 ```coffeescript
 api.bodyParser({
@@ -163,8 +163,8 @@ api.bodyParser({
 
 
 ### Plugins
-As of version 0.2.0 you can create your own plugins apart from Core-Addons.
-This allows you to extend your API without changing Sys-API's source.
+As of version 0.2.0 you can create your own plugins.
+They allow you to extend your API without changing Sys-API's source.
 
 Plugins can also act as middlware:
 ```coffeescript
@@ -194,9 +194,14 @@ Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/C
 
 
 ####Demos / Examples:
-https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
+You should definately check the examples:
 
-https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
+Coffeescript: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
+
+Javascript:   https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
 
 ##How to install:
-Just use `npm install sys-api` and copy the content of the demo-file. 
+Just use `npm install sys-api` and use the content of the demo-file. 
+
+####Problems?
+If you experience any problems try using `npm install sys-api --no-bin-links`
