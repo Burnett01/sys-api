@@ -2,7 +2,7 @@ var Fs, os, pwdg;
 
 os = require('os');
 
-pwdg = require('./assets/passwd-groups');
+pwdg = require('passwd-groups');
 
 Fs = require('../Fs');
 
