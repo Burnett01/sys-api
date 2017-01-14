@@ -1,10 +1,10 @@
 {
   "name": "sys-api",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "bugs": {
     "url": "https://github.com/Cloud2Box/sys-api/issues"
   },
-  "description": "A modular System-API, based on RestifyJS",
+  "description": "A modular System-API framework - on top of RestifyJS",
   "keywords": [
     "api",
     "system",
@@ -27,7 +27,9 @@
     "cors",
     "query",
     "router",
-    "routing"
+    "routing",
+    "tls",
+    "security"
   ],
   "author": {
     "name": "Cloud2Box - IT Dienstleistungen",
