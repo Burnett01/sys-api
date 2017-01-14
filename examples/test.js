@@ -185,11 +185,4 @@ api.get('/os/system/cpus', api.os.system.cpus());
 
 api.get('/os/system/networkInterfaces', api.os.system.networkInterfaces());
 
-api.get('/os/system/netfilter/ip_conntrack_count', function(router) {
-  return api.os.system.netfilter.ip_conntrack_count(function(err, data) {
-    router.next.ifError(err);
-    return router.send(data);
-  });
-});
-
 api.connect(8080);

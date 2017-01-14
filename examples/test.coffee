@@ -222,13 +222,6 @@ api.get('/os/system/memory/free', api.os.system.memory.free())
 api.get('/os/system/cpus', api.os.system.cpus())
 api.get('/os/system/networkInterfaces', api.os.system.networkInterfaces())
 
-api.get('/os/system/netfilter/ip_conntrack_count', (router) ->
-    api.os.system.netfilter.ip_conntrack_count((err, data) ->
-        router.next.ifError(err)
-        router.send(data)
-    )
-)
-
 
 # ´´´´´´´ HIT IT UP! ´´´´´´´
 
