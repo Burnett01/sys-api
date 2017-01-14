@@ -42,6 +42,7 @@
   "dependencies": {
     "restify": "*",
     "bcryptjs": "*",
-    "morgan": "*"
+    "morgan": "*",
+    "passwd-groups": "*"
   }
 }
