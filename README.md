@@ -4,7 +4,7 @@ A modular System-API framework for NodeJS - on top of RestifyJS.
 It is written in Coffeescript and compiled .js files are included.
 You don't need Coffeescript for it to function.
 
-[![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api)
+[![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
 ---
 
 ####Features:
