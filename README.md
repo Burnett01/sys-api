@@ -7,7 +7,7 @@ You don't need Coffeescript for it to function.
 [![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
 ---
 
-####Features:
+#### Features:
 + Authorization (optional bcrypt)
 + CORS
 + HTTP/S (TLS)
@@ -193,15 +193,15 @@ Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/C
 
 
 
-####Demos / Examples:
+#### Demos / Examples:
 You should definately check the examples:
 
 Coffeescript: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
 
 Javascript:   https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
 
-##How to install:
+## How to install:
 Just use `npm install sys-api` and use the content of the demo-file. 
 
-####Problems?
+#### Problems?
 If you experience any problems try using `npm install sys-api --no-bin-links`
