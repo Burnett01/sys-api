@@ -4,7 +4,7 @@ A modular System-API framework for NodeJS - on top of RestifyJS.
 It is written in Coffeescript and compiled .js files are included.
 You don't need Coffeescript for it to function.
 
-[![Build Status](https://travis-ci.org/Cloud2Box/sys-api.svg?branch=master)](https://travis-ci.org/Cloud2Box/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
+[![Build Status](https://travis-ci.org/Burnett01/sys-api.svg?branch=master)](https://travis-ci.org/Burnett01/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
 ---
 
 #### Features:
@@ -56,7 +56,7 @@ api.get({ url: '/hello' }, "Hello World")
 #=> {"response":"Hello World"}
 ```
 
-Check the wiki for more: https://github.com/Cloud2Box/sys-api/wiki/Routing
+Check the wiki for more: https://github.com/Burnett01/sys-api/wiki/Routing
 
 ---
 
@@ -125,7 +125,7 @@ The BodyParser can be enabled with a single option.
 Everything else is handled for you.
 Once enabled, you can access the body with `obj.req.body` in your routes.
 
-Check: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee#L53
+Check: https://github.com/Burnett01/sys-api/blob/master/examples/test.coffee#L53
 
 ```coffeescript
 api.bodyParser({
@@ -178,16 +178,16 @@ api.get('/myplugin/test', api.myplugin.test)
 api.connect(8000)
 ```
 
-Check out: https://github.com/Cloud2Box/sys-api/wiki/Create-a-plugin
+Check out: https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
 
-Check out: https://github.com/Cloud2Box/sys-api/wiki/Routing
+Check out: https://github.com/Burnett01/sys-api/wiki/Routing
 
 ### Core-Addons
 Core-Addons are bound to the API and core-features. Such as plugins, they can be maintained from within an external file.
 As of now there are three Core-Addons available (FS, OS, NET) but you can create you own.
 They can also act as middleware.
 
-Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/Create-an-Addon-(core)
+Check out the wiki for instructions: https://github.com/Burnett01/sys-api/wiki/Create-an-Addon-(core)
 
 > Once you've finished your addon, please submit a pull-request. If it's useful, it'll be added.
 
@@ -196,9 +196,9 @@ Check out the wiki for instructions: https://github.com/Cloud2Box/sys-api/wiki/C
 #### Demos / Examples:
 You should definately check the examples:
 
-Coffeescript: https://github.com/Cloud2Box/sys-api/blob/master/examples/test.coffee
+Coffeescript: https://github.com/Burnett01/sys-api/blob/master/examples/test.coffee
 
-Javascript:   https://github.com/Cloud2Box/sys-api/blob/master/examples/test.js
+Javascript:   https://github.com/Burnett01/sys-api/blob/master/examples/test.js
 
 ## How to install:
 Just use `npm install sys-api` and use the content of the demo-file. 

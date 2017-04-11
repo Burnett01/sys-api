@@ -1,8 +1,8 @@
 {
   "name": "sys-api",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "bugs": {
-    "url": "https://github.com/Cloud2Box/sys-api/issues"
+    "url": "https://github.com/Burnett01/sys-api/issues"
   },
   "description": "A modular System-API framework - on top of RestifyJS",
   "keywords": [
@@ -32,14 +32,14 @@
     "security"
   ],
   "author": {
-    "name": "Cloud2Box - IT Dienstleistungen",
-    "email": "info@cloud2box.net",
-    "url": "https://github.com/Cloud2Box/sys-api"
+    "name": "Steven Agyekum",
+    "email": "agyekum@posteo.de",
+    "url": "https://github.com/Burnett01/sys-api"
   },
   "main": "./src/API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Cloud2Box/sys-api"
+    "url": "https://github.com/Burnett01/sys-api"
   },
   "dependencies": {
     "restify": "*",

@@ -19,10 +19,10 @@ List of notable changes:
 
 ## 27.07.2016
 
-+ Ability to use custom HTTPS port (https://github.com/Cloud2Box/sys-api/wiki/HTTP-&-HTTPS-(TLS))
++ Ability to use custom HTTPS port (https://github.com/Burnett01/sys-api/wiki/HTTP-&-HTTPS-(TLS))
 
 ---
 
 [more]
 
-https://github.com/Cloud2Box/sys-api/commits/master
+https://github.com/Burnett01/sys-api/commits/master
