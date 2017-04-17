@@ -8,18 +8,18 @@ You don't need Coffeescript for it to function.
 ---
 
 #### Features:
-+ Authorization (optional bcrypt)
-+ CORS
++ Authorization (optional bcrypt, anonymous)
++ CORS (Cross-Origin Resource Sharing)
 + HTTP/S (TLS)
-+ BodyParser
-+ AcceptParser
-+ DateParser
-+ QueryParser
++ Body Parser
++ Accept Parser
++ Date Parser
++ Query Parser
 + Jsonp
-+ GzipResponse
++ Gzip Response / Compression
 + Throttle
-+ ConditionalRequest
-+ Extensive routing
++ Conditional Request
++ Extensive Routing
 + Logging (morgan/custom)
 + Plugins (extend your api)
 + Addons (extend sys-api' core)
@@ -27,7 +27,7 @@ You don't need Coffeescript for it to function.
 ---
 
 ### Routing
-There are tons of routing-variations!
+You can use a route in many different ways!
 
 For example, this is how simple it can be:
 
@@ -49,7 +49,7 @@ api.get('/hello', (router) ->
 #=> "Hello World"
 ```
 
-OR use an object:
+You can also use an object:
 
 ```coffeescript
 api.get({ url: '/hello' }, "Hello World")
@@ -63,11 +63,17 @@ Check the wiki for more: https://github.com/Burnett01/sys-api/wiki/Routing
 ### Authorization
 Such as Restify, currently only HTTP Basic Auth and HTTP Signature are supported.
 
+In addition, we allow bcyrpt encrypted passwords to be used in Basic Auth HTTP header,
+and anonymous access.
+
+#### Basic example:
+
 ```coffeescript
 api.auth({
     enabled: true,
-    method: 'basic',
+    method: 'basic',    
     bcrypt: false,
+    anon: false,
     users: {
         testuser: {
             password: 'testpw'
@@ -76,7 +82,71 @@ api.auth({
 })
 ```
 
-> if bcrypt is enabled, pass an encrypted hash with your route.
+#### Bcrypt example:
+
+> if bcrypt is enabled, pass the hash with the Basic Auth header.
+
+
+```coffeescript
+api.auth({
+    enabled: true,
+    method: 'basic',
+    bcrypt: true,
+    anon: false,
+    users: {
+        testuser: {
+            # Whenever bcrypt is enabled, we must use the hash instead of the plain password.
+            #
+            # For example:
+            #   Let's say the plain password "testpw" becomes this bcrypt hash: 
+            #   "$2a$04$GRD1gvo20Gqskwk5g9qsgO0urOWDAO[...]"
+            # ---------------------------------------------------------------------
+            # So we must use the hash:
+            password: '$2a$04$GRD1gvo20Gqskwk5g9qsgO0ur[...]'
+            # ---------------------------------------------------------------------
+            # Now our application (for instance PHP) generates a new hash
+            # to be used in authorization procedure.
+            # As soon as the application wants to perform authorization against the API,
+            # the Basic Auth header must contain the hash in its base64 representation:
+            # ---------------------------------------------------------------------
+            # This is how a generic authorization header looks like:
+            #   username:password
+            #   -> test:testpw
+            #   -> base64
+            #   -> dGVzdDp0ZXN0cHc=
+            #   ++ So the Authorization header becomes:
+            #   Authorization: Basic dGVzdDp0ZXN0cHc=
+            # ---------------------------------------------------------------------
+            # This is how a the authorization header with bcrypt may look like:
+            #   username:hash
+            #   -> test:$2a$04$jdGtS8OCXCn.e2b1DI584OAA65r0[...]
+            #   -> base64
+            #   -> dGVzdDokMmEkMDQkamRHdFM4T0NYQ24uZTJiMURJNTg0T0FBNjV[...]
+            #   ++ So the Authorization header becomes:
+            #   Authorization: Basic dGVzdDokMmEkMDQkamRHdFM4T0NYQ24uZTJiMURJNTg0T0FBNjV[...]
+        }   
+    }
+})
+```
+
+#### Anonymous access:
+You may also allow anonymous access by using the ``anon`` property.
+
+If anonymous access is enabled, valid and anonymous users have access.
+
+```coffeescript
+api.auth({
+    enabled: true,
+    method: 'basic',    
+    bcrypt: false,
+    anon: true,
+    users: {
+        testuser: {
+            password: 'testpw'
+        }   
+    }
+})
+```
 
 ---
 
@@ -97,9 +167,9 @@ api.cors({
 ### HTTP/S
 Sys-API supports HTTP and HTTPS simultaneously.
 
-You don't have to set up things twice. Simply pass a key and certificate property,
+You don't have to define things twice. Simply pass a key and certificate property,
 and the API will handle that for you. Once configured, your API-instance will listen on your specified HTTP and HTTPS port.
-Port 443 is the default port for HTTPS. If you wish to use any other port, simply pass a second argument to ```connect()```.
+Port 443 is the default port for HTTPS. If you wish to use any other port, simply pass a second argument to ```listen()```.
 
 ```coffeescript
 api = new API({
@@ -109,14 +179,14 @@ api = new API({
     }
 })
 
-api.connect(80) #API is going to listen on HTTP(80) and HTTPS(443)
+api.listen(80) #API is going to listen on HTTP(80) and HTTPS(443)
 
 # OR
 
-api.connect(80, 8443) #API is going to listen on HTTP(80) and HTTPS(8443)
+api.listen(80, 8443) #API is going to listen on port HTTP(80) and HTTPS(8443)
 ```
 
-> If no key/certificate property is available, your API-instance won't listen to HTTPS.
+> If no key/certificate property is available, your API-instance won't support HTTPS.
 
 ---
 
