@@ -1,6 +1,12 @@
 List of notable changes:
 ---
 
+## 17.04.2017
+
++ The ``connect()`` method was renamed to ``listen()``.
+
+To keep compatibility you can still use the old name.
+
 ## 14.01.2017
 
 + Moved passwd-groups plugin to package.json (dependencies). It is no longer included but available in this project.
