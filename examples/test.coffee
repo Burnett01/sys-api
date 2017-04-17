@@ -19,6 +19,7 @@ api.auth({
     enabled: false,
     method: 'basic',
     bcrypt: true,
+    anon: false,
     users: {
         test: {
             password: 'testpw'
@@ -225,5 +226,5 @@ api.get('/os/system/networkInterfaces', api.os.system.networkInterfaces())
 
 # ´´´´´´´ HIT IT UP! ´´´´´´´
 
-api.connect(8080)
+api.listen(8080)
 

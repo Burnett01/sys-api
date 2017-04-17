@@ -2,12 +2,26 @@ var API, api;
 
 API = require('sys-api');
 
-api = new API({});
+api = new API({
+    /* 'plugins.root' : ['/plugins/', '/home/user/plugins/'] */
+    /* 'plugins.autoload' : true, */
+    /* 'logger' : 'dev' */
+});
+
+/*  Optionally pass an object to restify's createServer-function */
+/*  http://restify.com/#creating-a-server */
+/*  example:  api = new API({ restify: { name: 'MyApp' } }) */
+
+
+/* ´´´´´´´ SETUP ´´´´´´´ */
+
+/* => Authorization */
 
 api.auth({
   enabled: false,
   method: 'basic',
   bcrypt: true,
+  anon: false,
   users: {
     test: {
       password: 'testpw'
@@ -15,19 +29,38 @@ api.auth({
   }
 });
 
+/* => CORS (Cross-Origin Resource Sharing) */
+
 api.cors({
   enabled: false
 });
+
+/* => BodyParser */
 
 api.bodyParser({
   enabled: true
 });
 
+/* ´´´´´´´ DEMO ROUTES ´´´´´´´ */
+
+/* <-- Desc: Health-Status | Path: /heartbeat --> */
+
+/* Simple GET-Response */
+
 api.get('/heartbeat', "dub");
+
+/* Simple POST-Response */
+/* Access POST-values via req.body.value */
 
 api.post('/postman', function(router) {
   return router.send(router.req.body);
 });
+
+/* ´´´´´´´ ADDON ROUTES ´´´´´´´ */
+/* Each route correspondens to an addon */
+/* Check the src/addon/ folder for more information */
+
+/* <-- Addon: Net | Path: /net --> */
 
 api.get('/net/isip/:ip', api.net.isIP);
 
@@ -35,12 +68,16 @@ api.get('/net/isv4/:ip', api.net.isIPv4);
 
 api.get('/net/isv6/:ip', api.net.isIPv6);
 
+/* <-- Addon: FS | Path: /fs --> */
+
 api.post('/fs/readfile', function(router) {
   return api.fs.readFile(router.req.body.path, function(err, content) {
     router.next.ifError(err);
     return router.send(content);
   });
 });
+
+/* <-- Addon: OS | Path: /os/users --> */
 
 api.get('/os/users/all', function(router) {
   return api.os.users.all(function(err, users) {
@@ -106,6 +143,8 @@ api.post('/os/users/del', function(router) {
   });
 });
 
+/* <-- Addon: OS | Path: /os/groups --> */
+
 api.get('/os/groups/all', function(router) {
   return api.os.groups.all(function(err, groups) {
     router.next.ifError(err);
@@ -143,6 +182,8 @@ api.post('/os/groups/del', function(router) {
     return router.send(status);
   });
 });
+
+/* <-- Addon: OS | Path: /os/system --> */
 
 api.get('/os/system/all', {
   "hostname": api.os.system.hostname(),
@@ -185,4 +226,6 @@ api.get('/os/system/cpus', api.os.system.cpus());
 
 api.get('/os/system/networkInterfaces', api.os.system.networkInterfaces());
 
-api.connect(8080);
+/* ´´´´´´´ HIT IT UP! ´´´´´´´ */
+
+api.listen(8080);
