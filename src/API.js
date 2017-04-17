@@ -103,7 +103,7 @@ API = (function(superClass) {
     }
   }
 
-  API.prototype.connect = function(http, https) {
+  API.prototype.listen = function(http, https) {
     var instance, j, len1, ref, results;
     ref = this.instances;
     results = [];
@@ -120,6 +120,10 @@ API = (function(superClass) {
     return results;
   };
 
+  API.prototype.connect = function(http, https) {
+    return this.listen(http, https);
+  };
+
   API.prototype.pre = function(fn) {
     return this.server("pre", fn);
   };
@@ -129,38 +133,41 @@ API = (function(superClass) {
   };
 
   API.prototype.auth = function(options) {
-    var users;
+    var anon, users;
     options = options || {
       enabled: false
     };
-    if (options.enabled === true) {
-      this.server("use", RESTIFY.authorizationParser());
-      if (options.method === 'basic' || options.hasOwnProperty('users')) {
-        users = options.users;
-        return this.server("use", function(req, res, next) {
-          var _hash;
-          if (req.username === 'anonymous' || !users[req.username]) {
-            next(new API.error.NotAuthorizedError());
-          }
-          if (options.bcrypt === true) {
-            _hash = req.authorization.basic.password.replace('$2y$', '$2a$');
-            return BCRYPT.compare(users[req.username].password, _hash, function(err, valid) {
-              if (valid === true) {
-                return next();
-              } else {
-                return next(new API.error.NotAuthorizedError());
-              }
-            });
+    if (!options.enabled || options.method !== 'basic' || !'users' in options) {
+      return;
+    }
+    this.server("use", RESTIFY.authorizationParser());
+    users = options.users;
+    anon = options.anon || false;
+    return this.server("use", function(req, res, next) {
+      var _hash;
+      if (anon && req.username === 'anonymous') {
+        return next();
+      }
+      if (!users[req.username]) {
+        return next(new API.error.NotAuthorizedError());
+      }
+      if (options.bcrypt !== true) {
+        if (req.authorization.basic.password === users[req.username].password) {
+          return next();
+        } else {
+          return next(new API.error.NotAuthorizedError());
+        }
+      } else {
+        _hash = req.authorization.basic.password.replace('$2y$', '$2a$');
+        return BCRYPT.compare(users[req.username].password, _hash, function(err, valid) {
+          if (valid === true) {
+            return next();
           } else {
-            if (req.authorization.basic.password === users[req.username].password) {
-              return next();
-            } else {
-              return next(new API.error.NotAuthorizedError());
-            }
+            return next(new API.error.NotAuthorizedError());
           }
         });
       }
-    }
+    });
   };
 
   API.prototype.cors = function(options) {

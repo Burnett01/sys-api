@@ -65,7 +65,7 @@ class API extends ClassHelper
         # Define an array for the RESTIFY.createServer instances
         @instances = []
         
-        # Create a server with the cloned-object (without tls settings)
+        # Create a server with our cloned object (except tls settings)
         @instances.push(new RESTIFY.createServer(@options._restify))
         
         # Check whether our original options.restify object contains tls settings
@@ -74,7 +74,7 @@ class API extends ClassHelper
             instance.server.tls = true
             @instances.push(instance)
             
-        # Define a wrapper function, which runs any restify-method-function on all instances
+        # Define a wrapper function which runs a method-function on any instance
         @server = (type, args..., notls) =>
             for instance in @instances
                 if typeof notls == 'boolean'
@@ -97,7 +97,7 @@ class API extends ClassHelper
 
     ########  API Methods  ########
 
-    connect: (http, https) ->
+    listen: (http, https) ->
         for instance in @instances
             ((http, https) ->
                 port = 
@@ -107,7 +107,11 @@ class API extends ClassHelper
 
                 instance.listen port, () ->
                     console.log('API listening on port %d', port)
+
             )(http, https)
+
+    # Legacy function that got replaced by listen()
+    connect: (http, https) -> @listen(http, https)
 
     pre: (fn) ->
         @server("pre", fn)
@@ -118,88 +122,106 @@ class API extends ClassHelper
     
     ########  Bundled API Plugins  ########
     
+    # Authorization parser
     auth: (options) ->
         options = options || { enabled: false }
         
-        if options.enabled == true
-            @server("use", RESTIFY.authorizationParser())
-            
-            if options.method == 'basic' || options.hasOwnProperty('users')
-                users = options.users
-                
-                @server("use", (req, res, next) ->
-                    if req.username == 'anonymous' || !users[req.username]
-                        next(new API.error.NotAuthorizedError())
+        if !options.enabled || options.method != 'basic'|| !'users' of options
+            return
 
-                    if options.bcrypt == true
-                        #fix for php-blowfish-hashes
-                        _hash = req.authorization.basic.password.replace('$2y$', '$2a$')
-    
-                        BCRYPT.compare(users[req.username].password, _hash, (err, valid) ->
-                            if valid == true then return next() else next(new API.error.NotAuthorizedError())
-                        )
-                        
-                    else
-                        if req.authorization.basic.password == users[req.username].password
-                            return next()
-                        else
-                            next(new API.error.NotAuthorizedError())
+        @server("use", RESTIFY.authorizationParser())
+
+        users = options.users
+        anon = options.anon or false
+
+        @server("use", (req, res, next) ->
+            # Anonymous access
+            if anon && req.username == 'anonymous'
+                return next()
+            # Invalid username
+            if !users[req.username]
+                return next(new API.error.NotAuthorizedError())
+            # Basic Authentication
+            if options.bcrypt != true
+                if req.authorization.basic.password == users[req.username].password
+                    return next()
+                else
+                    next(new API.error.NotAuthorizedError())
+            # Basic Authentication + Bcrypt
+            else
+                #fix for php-blowfish-hashes
+                _hash = req.authorization.basic.password.replace('$2y$', '$2a$')
+
+                BCRYPT.compare(users[req.username].password, _hash, (err, valid) ->
+                    if valid == true then return next()
+                    else next(new API.error.NotAuthorizedError())
                 )
-
+        )
+    
+    # Cross-Origin Resource Sharing
     cors: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.CORS(options.settings))
-            
+
+    # Body parser
     bodyParser: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.bodyParser(options.settings))
 
+    # Accept parser
     acceptParser: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.acceptParser(options.settings))
 
+    # Date parser
     dateParser: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.dateParser(options.settings))
 
+    # Query parser
     queryParser: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.queryParser(options.settings))
 
+    # JOSN-P
     jsonp: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.jsonp(options.settings))
 
+    # Gzip response
     gzipResponse: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.gzipResponse(options.settings), true)
 
+    # Request expiry
     requestExpiry: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.requestExpiry(options.settings))
 
+    # Throttle
     throttle: (options) ->
         options = options || { enabled: false }
         
         if options.enabled == true
             @server("use", RESTIFY.throttle(options.settings))
 
+    # Conditional request
     conditionalRequest: (options) ->
         options = options || { enabled: false }
         
@@ -207,13 +229,14 @@ class API extends ClassHelper
             @server("use", RESTIFY.conditionalRequest(options.settings))
 
 
-
     ########  API Internal Functions  ########
     
+    # Response wrapper
     _response = (req, res, next, data) ->
         res.send({ response: data })
         next()
-      
+    
+    # Request wrapper
     _request = (callbacks, req, res, next) ->
         if typeof callbacks[0] is 'string' or typeof callbacks[0] is 'object'
             return _response(req, res, next, callbacks[0])
