@@ -4,6 +4,7 @@ List of notable changes:
 ## 17.04.2017
 
 + The ``connect()`` method was renamed to ``listen()``.
++ Added ``anon`` property to allow anonymous access
 
 To keep compatibility you can still use the old name.
 

@@ -245,7 +245,7 @@ api = new API({
 
 api.get('/myplugin/test', api.myplugin.test)
 
-api.connect(8000)
+api.listen(8000)
 ```
 
 Check out: https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
