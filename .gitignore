@@ -1,13 +1,8 @@
 /.vagrant
 Vagrantfile
-/src/node_modules
 /node_modules
 .settings
-/examples/lime
-/test
-/testus
 .gitignore
 /dev
-/deb
 .browse.VC.db
 .browse.VC.db-wal
