@@ -1,3 +1,7 @@
+/* Credits to "The Little Book on CoffeeScript"
+ @ https://arcturo.github.io/library/coffeescript/03_classes.html
+*/
+
 var ClassHelper, moduleKeywords,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
