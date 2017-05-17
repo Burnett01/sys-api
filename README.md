@@ -1,13 +1,16 @@
 # sys-api
+
 A modular System-API framework for NodeJS - on top of RestifyJS.
 
 It is written in Coffeescript and compiled .js files are included.
 You don't need Coffeescript for it to function.
 
 [![Build Status](https://travis-ci.org/Burnett01/sys-api.svg?branch=master)](https://travis-ci.org/Burnett01/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
+
 ---
 
 #### Features:
+
 + Authorization (optional bcrypt, anonymous)
 + CORS (Cross-Origin Resource Sharing)
 + HTTP/S (TLS)
@@ -17,6 +20,7 @@ You don't need Coffeescript for it to function.
 + Query Parser
 + Jsonp
 + Gzip Response / Compression
++ Request Expiry
 + Throttle
 + Conditional Request
 + Extensive Routing
@@ -26,7 +30,31 @@ You don't need Coffeescript for it to function.
 
 ---
 
+# Table of contents
+* [Routing](#routing)
+* [Authorization](#authorization)
+    * [Basic example](#basic-example)
+    * [Bcrypt example](#bcrypt-example)
+    * [Anonymous access](#anonymous-access)
+* [CORS (Cross-Origin Resource Sharing)](#cors-cross-origin-resource-sharing)
+* [HTTP/S - TLS](#https---tls)
+* [BodyParser](#bodyparser)
+* [Additional Restify plugins](#additional-restify-plugins)
+* [Plugins](#plugins)
+* [Core-Addons](#core-addons)
+* [Demos / Examples](#demos-examples)
+* [How to install](#how-to-install)
+  * [Support](#support)
+* [Unit-Tests](#unit-tests)
+  * [Make](#make)
+  * [NPM](#npm)
+* [Contributing](#contributing)
+* [License](#license)
+
+---
+
 ### Routing
+
 You can use a route in many different ways!
 
 For example, this is how simple it can be:
@@ -35,12 +63,14 @@ For example, this is how simple it can be:
 api.get('/hello', "Hello World")
 #=> {"response":"Hello World"}
 ```
+
 ```coffeescript
 api.get('/hello', (router) ->
     router.send("Hello World")
 )
 #=> {"response":"Hello World"}
 ```
+
 ```coffeescript
 api.get('/hello', (router) ->
     router.res.send("Hello World")
@@ -56,11 +86,12 @@ api.get({ url: '/hello' }, "Hello World")
 #=> {"response":"Hello World"}
 ```
 
-Check the wiki for more: https://github.com/Burnett01/sys-api/wiki/Routing
+Check the wiki for more: [Go to Wiki](https://github.com/Burnett01/sys-api/wiki/Routing)
 
 ---
 
 ### Authorization
+
 Such as Restify, currently only HTTP Basic Auth and HTTP Signature are supported.
 
 In addition, we allow bcyrpt encrypted passwords to be used in Basic Auth HTTP header,
@@ -130,6 +161,7 @@ api.auth({
 ```
 
 #### Anonymous access:
+
 You may also allow anonymous access by using the ``anon`` property.
 
 If anonymous access is enabled, valid and anonymous users have access.
@@ -151,6 +183,7 @@ api.auth({
 ---
 
 ### CORS (Cross-Origin Resource Sharing)
+
 ```coffeescript
 api.cors({
     enabled: true,
@@ -164,7 +197,8 @@ api.cors({
 
 ---
 
-### HTTP/S
+### HTTP/S - TLS
+
 Sys-API supports HTTP and HTTPS simultaneously.
 
 You don't have to define things twice. Simply pass a key and certificate property,
@@ -191,6 +225,7 @@ api.listen(80, 8443) #API is going to listen on port HTTP(80) and HTTPS(8443)
 ---
 
 ### BodyParser
+
 The BodyParser can be enabled with a single option.
 Everything else is handled for you.
 Once enabled, you can access the body with `obj.req.body` in your routes.
@@ -231,8 +266,27 @@ api.bodyParser({
 })
 ```
 
+---
+
+### Additional Restify plugins
+
+In addition to the BodyParser, the following plugins are available:
+
+ * Accept - ``api.acceptParser()``
+ * Date Parser - ``api.dateParser()``
+ * Query Parser - ``api.queryParser()``
+ * Jsonp - ``api.jsonp()``
+ * Gzip Response / Compression - ``api.gzipResponse()``
+ * Request Expiry - ``api.requestExpiry()``
+ * Throttle - ``api.throttle()``
+ * Conditional Request - ``api.conditionalRequest()``
+
+Documentation: http://restify.com/#bundled-plugins
+
+---
 
 ### Plugins
+
 As of version 0.2.0 you can create your own plugins.
 They allow you to extend your API without changing Sys-API's source.
 
@@ -252,26 +306,72 @@ Check out: https://github.com/Burnett01/sys-api/wiki/Create-a-plugin
 
 Check out: https://github.com/Burnett01/sys-api/wiki/Routing
 
+---
+
 ### Core-Addons
+
 Core-Addons are bound to the API and core-features. Such as plugins, they can be maintained from within an external file.
 As of now there are three Core-Addons available (FS, OS, NET) but you can create you own.
 They can also act as middleware.
 
-Check out the wiki for instructions: https://github.com/Burnett01/sys-api/wiki/Create-an-Addon-(core)
+Check out the wiki for instructions:
+
+https://github.com/Burnett01/sys-api/wiki/Create-an-Addon-(core)
 
 > Once you've finished your addon, please submit a pull-request. If it's useful, it'll be added.
 
+---
 
+### Demos / Examples:
 
-#### Demos / Examples:
 You should definately check the examples:
 
 Coffeescript: https://github.com/Burnett01/sys-api/blob/master/examples/example.coffee
 
 Javascript:   https://github.com/Burnett01/sys-api/blob/master/examples/example.js
 
+---
+
 ## How to install:
+
 Just use `npm install sys-api` and use the content of the demo-file. 
 
-#### Problems?
+#### Support
+
 If you experience any problems try using `npm install sys-api --no-bin-links`
+
+---
+
+## Unit-Tests
+
+The testing-framework used by this module is [Mocha](https://github.com/mochajs/mocha) with the BDD / TDD assertion library [Chai](https://github.com/chaijs/chai).
+
+Various tests are performed to make sure this module runs as smoothly as possible.
+
+* test/test.default.js `Performs 8 tests` | [Source](../master/test/test.default.js)
+
+Output using [Mocha](https://github.com/mochajs/mocha) `spec` reporter:   
+
+<img src="http://i.imgur.com/vhY4OZm.png" />
+
+Default reporter: `list`
+
+### Make
+
+```make test```
+
+### NPM
+
+```npm test```
+
+---
+
+## Contributing
+
+You're very welcome and free to contribute. Thank you.
+
+---
+
+## License
+
+[MIT](../master/LICENSE.MD)
