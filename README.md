@@ -195,7 +195,7 @@ The BodyParser can be enabled with a single option.
 Everything else is handled for you.
 Once enabled, you can access the body with `obj.req.body` in your routes.
 
-Check: https://github.com/Burnett01/sys-api/blob/master/examples/test.coffee#L53
+Check: https://github.com/Burnett01/sys-api/blob/master/examples/example.coffee#L53
 
 ```coffeescript
 api.bodyParser({
@@ -266,9 +266,9 @@ Check out the wiki for instructions: https://github.com/Burnett01/sys-api/wiki/C
 #### Demos / Examples:
 You should definately check the examples:
 
-Coffeescript: https://github.com/Burnett01/sys-api/blob/master/examples/test.coffee
+Coffeescript: https://github.com/Burnett01/sys-api/blob/master/examples/example.coffee
 
-Javascript:   https://github.com/Burnett01/sys-api/blob/master/examples/test.js
+Javascript:   https://github.com/Burnett01/sys-api/blob/master/examples/example.js
 
 ## How to install:
 Just use `npm install sys-api` and use the content of the demo-file. 
