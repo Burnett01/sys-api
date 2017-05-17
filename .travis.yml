@@ -1,6 +1,14 @@
 sudo: false
 language: node_js
 node_js:
-   - "4"
-   - "6"
-   - "stable"
+  - "stable"
+  - "7"
+  - "6"
+  - "5"
+  - "4"
+
+install:
+  - npm install
+
+script:
+  - npm run test
