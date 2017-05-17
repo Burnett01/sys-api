@@ -1,6 +1,6 @@
 {
   "name": "sys-api",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "bugs": {
     "url": "https://github.com/Burnett01/sys-api/issues"
   },
@@ -29,7 +29,9 @@
     "router",
     "routing",
     "tls",
-    "security"
+    "security",
+    "request",
+    "tests"
   ],
   "author": {
     "name": "Steven Agyekum",
@@ -37,6 +39,9 @@
     "url": "https://github.com/Burnett01/sys-api"
   },
   "main": "./src/API",
+  "scripts": {
+    "test": "mocha --reporter spec ./test/test.default.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Burnett01/sys-api"
@@ -46,5 +51,9 @@
     "bcryptjs": "*",
     "morgan": "*",
     "passwd-groups": "*"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.4.1"
   }
 }
