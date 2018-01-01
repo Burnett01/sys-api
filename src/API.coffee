@@ -4,7 +4,7 @@ The MIT License (MIT)
 Product:      System API (SysAPI)
 Description:  A modular System-API for NodeJS - RestifyJS
 
-Copyright (c) 2015-2017 Steven Agyekum <agyekum@posteo.de>
+Copyright (c) 2015-2018 Steven Agyekum <agyekum@posteo.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -247,6 +247,7 @@ class API extends ClassHelper
                     req: req
                     res: res 
                     next: (data) -> if data? then next(data) else next
+                    # Todo: add next.ifError
                     send: (data) -> _response(req, res, next, data)
                 }])
     
