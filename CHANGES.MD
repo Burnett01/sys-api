@@ -1,6 +1,10 @@
 List of notable changes:
 ---
 
+## 04.05.2019
+
++ Dropped support for Node ``4`` and Node ``5``
+
 ## 17.04.2017
 
 + The ``connect()`` method was renamed to ``listen()``.
