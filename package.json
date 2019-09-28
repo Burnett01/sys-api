@@ -1,5 +1,5 @@
 {
-  "name": "sys-api",
+  "name": "@burnett01/sys-api",
   "version": "1.0.0",
   "bugs": {
     "url": "https://github.com/Burnett01/sys-api/issues"
@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Burnett01/sys-api"
+    "url": "ssh://git@github.com/Burnett01/sys-api.git"
   },
   "dependencies": {
     "bcryptjs": "~2.4.3",
