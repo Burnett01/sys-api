@@ -48,8 +48,9 @@ class API extends ClassHelper
     # Extend PluginHelper
     @extend(PluginHelper)
 
-
     constructor: (options) ->
+        super()
+
         @options = options
 
         if @options['restify']?
@@ -159,78 +160,86 @@ class API extends ClassHelper
         )
     
     # Cross-Origin Resource Sharing
-    cors: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.CORS(options.settings))
+    cors: (opts) ->
+        useRestifyPlugin("CORS", opts)
 
     # Body parser
-    bodyParser: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.bodyParser(options.settings))
+    bodyParser: (opts) ->
+        useRestifyPlugin("bodyParser", opts)
 
     # Accept parser
-    acceptParser: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.acceptParser(options.settings))
+    acceptParser: (opts) ->
+        useRestifyPlugin("acceptParser", opts)
 
     # Date parser
-    dateParser: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.dateParser(options.settings))
+    dateParser: (opts) ->
+        useRestifyPlugin("dateParser", opts)
 
     # Query parser
-    queryParser: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.queryParser(options.settings))
+    queryParser: (opts) ->
+        useRestifyPlugin("queryParser", opts)
 
     # JOSN-P
-    jsonp: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.jsonp(options.settings))
+    jsonp: (opts) ->
+        useRestifyPlugin("jsonp", opts)
 
     # Gzip response
-    gzipResponse: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.gzipResponse(options.settings), true)
+    gzipResponse: (opts) ->
+        useRestifyPlugin("gzipResponse", opts)
 
     # Request expiry
-    requestExpiry: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.requestExpiry(options.settings))
+    requestExpiry: (opts) ->
+        useRestifyPlugin("requestExpiry", opts)
 
     # Throttle
-    throttle: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.throttle(options.settings))
+    throttle: (opts) ->
+        useRestifyPlugin("throttle", opts)
+    
+    # Audit logger
+    auditLogger: (opts) ->
+        useRestifyPlugin("auditLogger", opts)
+
+    # Request logger
+    requestLogger: (opts) ->
+        useRestifyPlugin("requestLogger", opts)
+
+    # Sanitize Path
+    sanitizePath: (opts) ->
+        useRestifyPlugin("sanitizePath", opts)
+
+    # Serve Static
+    serveStatic: (opts) ->
+        useRestifyPlugin("serveStatic", opts)
+
+    # Full Response
+    fullResponse: (opts) ->
+        useRestifyPlugin("fullResponse", opts)
+
+    # JSON Body Parser
+    jsonBodyParser: (opts) ->
+        useRestifyPlugin("jsonBodyParser", opts)
+    
+    # Multipart Body Parser
+    multipartBodyParser: (opts) ->
+        useRestifyPlugin("multipartBodyParser", opts)
+
+    # Url Encoded Body Parser
+    urlEncodedBodyParser: (opts) ->
+        useRestifyPlugin("urlEncodedBodyParser", opts)
 
     # Conditional request
-    conditionalRequest: (options) ->
-        options = options || { enabled: false }
-        
-        if options.enabled == true
-            @server("use", RESTIFY.conditionalRequest(options.settings))
+    conditionalRequest: (opts) ->
+        useRestifyPlugin("conditionalRequest", opts)
 
-
+   
     ########  API Internal Functions  ########
     
+    useRestifyPlugin = (plugin, options) ->
+        options = options || { enabled: false }
+        skipTLS = plugin == "gzipResponse"
+        if plugin in RESTIFY && options.enabled
+            @server("use", RESTIFY[plugin](options.settings), skipTLS)
+
     # Response wrapper
     _response = (req, res, next, data) ->
         res.send({ response: data })
