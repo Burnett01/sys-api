@@ -196,6 +196,22 @@ describe('Sys-API [api-instance] Tests', function() {
         expect(interAPI.throttle).to.be.a('function');
         expect(interAPI).to.have.property('conditionalRequest');
         expect(interAPI.conditionalRequest).to.be.a('function');
+        expect(interAPI).to.have.property('auditLogger');
+        expect(interAPI.auditLogger).to.be.a('function');
+        expect(interAPI).to.have.property('requestLogger');
+        expect(interAPI.requestLogger).to.be.a('function');
+        expect(interAPI).to.have.property('sanitizePath');
+        expect(interAPI.sanitizePath).to.be.a('function');
+        expect(interAPI).to.have.property('serveStatic');
+        expect(interAPI.serveStatic).to.be.a('function');
+        expect(interAPI).to.have.property('fullResponse');
+        expect(interAPI.fullResponse).to.be.a('function');
+        expect(interAPI).to.have.property('jsonBodyParser');
+        expect(interAPI.jsonBodyParser).to.be.a('function');
+        expect(interAPI).to.have.property('multipartBodyParser');
+        expect(interAPI.multipartBodyParser).to.be.a('function');
+        expect(interAPI).to.have.property('urlEncodedBodyParser');
+        expect(interAPI.urlEncodedBodyParser).to.be.a('function');
  
         done();
     });
