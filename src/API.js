@@ -22,8 +22,7 @@
   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
   var API, Addons, BCRYPT, ClassHelper, MORGAN, PluginHelper, RESTIFY,
-    splice = [].splice,
-    indexOf = [].indexOf;
+    splice = [].splice;
 
   RESTIFY = require('restify');
 
@@ -39,7 +38,7 @@
   Addons = ["./addons/Fs", "./addons/Os", "./addons/Net"];
 
   API = (function() {
-    var _request, _response, addon, i, index, len, useRestifyPlugin;
+    var _request, _response, addon, i, index, len;
 
     class API extends ClassHelper {
       constructor(options) {
@@ -181,94 +180,105 @@
       
       // Cross-Origin Resource Sharing
       cors(opts) {
-        return useRestifyPlugin("CORS", opts);
+        return this.useRestifyPlugin("CORS", opts);
       }
 
       // Body parser
       bodyParser(opts) {
-        return useRestifyPlugin("bodyParser", opts);
+        return this.useRestifyPlugin("bodyParser", opts);
       }
 
       // Accept parser
       acceptParser(opts) {
-        return useRestifyPlugin("acceptParser", opts);
+        return this.useRestifyPlugin("acceptParser", opts);
       }
 
       // Date parser
       dateParser(opts) {
-        return useRestifyPlugin("dateParser", opts);
+        return this.useRestifyPlugin("dateParser", opts);
       }
 
       // Query parser
       queryParser(opts) {
-        return useRestifyPlugin("queryParser", opts);
+        return this.useRestifyPlugin("queryParser", opts);
       }
 
       // JOSN-P
       jsonp(opts) {
-        return useRestifyPlugin("jsonp", opts);
+        return this.useRestifyPlugin("jsonp", opts);
       }
 
       // Gzip response
       gzipResponse(opts) {
-        return useRestifyPlugin("gzipResponse", opts);
+        return this.useRestifyPlugin("gzipResponse", opts);
       }
 
       // Request expiry
       requestExpiry(opts) {
-        return useRestifyPlugin("requestExpiry", opts);
+        return this.useRestifyPlugin("requestExpiry", opts);
       }
 
       // Throttle
       throttle(opts) {
-        return useRestifyPlugin("throttle", opts);
+        return this.useRestifyPlugin("throttle", opts);
       }
 
       
       // Audit logger
       auditLogger(opts) {
-        return useRestifyPlugin("auditLogger", opts);
+        return this.useRestifyPlugin("auditLogger", opts);
       }
 
       // Request logger
       requestLogger(opts) {
-        return useRestifyPlugin("requestLogger", opts);
+        return this.useRestifyPlugin("requestLogger", opts);
       }
 
       // Sanitize Path
       sanitizePath(opts) {
-        return useRestifyPlugin("sanitizePath", opts);
+        return this.useRestifyPlugin("sanitizePath", opts);
       }
 
       // Serve Static
       serveStatic(opts) {
-        return useRestifyPlugin("serveStatic", opts);
+        return this.useRestifyPlugin("serveStatic", opts);
       }
 
       // Full Response
       fullResponse(opts) {
-        return useRestifyPlugin("fullResponse", opts);
+        return this.useRestifyPlugin("fullResponse", opts);
       }
 
       // JSON Body Parser
       jsonBodyParser(opts) {
-        return useRestifyPlugin("jsonBodyParser", opts);
+        return this.useRestifyPlugin("jsonBodyParser", opts);
       }
 
       
       // Multipart Body Parser
       multipartBodyParser(opts) {
-        return useRestifyPlugin("multipartBodyParser", opts);
+        return this.useRestifyPlugin("multipartBodyParser", opts);
       }
 
       // Url Encoded Body Parser
       urlEncodedBodyParser(opts) {
-        return useRestifyPlugin("urlEncodedBodyParser", opts);
+        return this.useRestifyPlugin("urlEncodedBodyParser", opts);
       }
 
       // Conditional request
       conditionalRequest(opts) {
-        return useRestifyPlugin("conditionalRequest", opts);
+        return this.useRestifyPlugin("conditionalRequest", opts);
+      }
+
+      useRestifyPlugin(plugin, options) {
+        var skipTLS;
+        options = options || {
+          enabled: false
+        };
+        skipTLS = plugin === "gzipResponse";
+        if (options.enabled) {
+          return this.server("use", RESTIFY[plugin](options.settings), skipTLS);
+        }
       }
 
       
@@ -323,18 +333,7 @@
     // Extend PluginHelper
     API.extend(PluginHelper);
 
-    
     //#######  API Internal Functions  ########
-    useRestifyPlugin = function(plugin, options) {
-      var skipTLS;
-      options = options || {
-        enabled: false
-      };
-      skipTLS = plugin === "gzipResponse";
-      if (indexOf.call(RESTIFY, plugin) >= 0 && options.enabled) {
-        return this.server("use", RESTIFY[plugin](options.settings), skipTLS);
-      }
-    };
 
     // Response wrapper
     _response = function(req, res, next, data) {

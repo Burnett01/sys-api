@@ -161,85 +161,86 @@ class API extends ClassHelper
     
     # Cross-Origin Resource Sharing
     cors: (opts) ->
-        useRestifyPlugin("CORS", opts)
+        @useRestifyPlugin("CORS", opts)
 
     # Body parser
     bodyParser: (opts) ->
-        useRestifyPlugin("bodyParser", opts)
+        @useRestifyPlugin("bodyParser", opts)
 
     # Accept parser
     acceptParser: (opts) ->
-        useRestifyPlugin("acceptParser", opts)
+        @useRestifyPlugin("acceptParser", opts)
 
     # Date parser
     dateParser: (opts) ->
-        useRestifyPlugin("dateParser", opts)
+        @useRestifyPlugin("dateParser", opts)
 
     # Query parser
     queryParser: (opts) ->
-        useRestifyPlugin("queryParser", opts)
+        @useRestifyPlugin("queryParser", opts)
 
     # JOSN-P
     jsonp: (opts) ->
-        useRestifyPlugin("jsonp", opts)
+        @useRestifyPlugin("jsonp", opts)
 
     # Gzip response
     gzipResponse: (opts) ->
-        useRestifyPlugin("gzipResponse", opts)
+        @useRestifyPlugin("gzipResponse", opts)
 
     # Request expiry
     requestExpiry: (opts) ->
-        useRestifyPlugin("requestExpiry", opts)
+        @useRestifyPlugin("requestExpiry", opts)
 
     # Throttle
     throttle: (opts) ->
-        useRestifyPlugin("throttle", opts)
+        @useRestifyPlugin("throttle", opts)
     
     # Audit logger
     auditLogger: (opts) ->
-        useRestifyPlugin("auditLogger", opts)
+        @useRestifyPlugin("auditLogger", opts)
 
     # Request logger
     requestLogger: (opts) ->
-        useRestifyPlugin("requestLogger", opts)
+        @useRestifyPlugin("requestLogger", opts)
 
     # Sanitize Path
     sanitizePath: (opts) ->
-        useRestifyPlugin("sanitizePath", opts)
+        @useRestifyPlugin("sanitizePath", opts)
 
     # Serve Static
     serveStatic: (opts) ->
-        useRestifyPlugin("serveStatic", opts)
+        @useRestifyPlugin("serveStatic", opts)
 
     # Full Response
     fullResponse: (opts) ->
-        useRestifyPlugin("fullResponse", opts)
+        @useRestifyPlugin("fullResponse", opts)
 
     # JSON Body Parser
     jsonBodyParser: (opts) ->
-        useRestifyPlugin("jsonBodyParser", opts)
+        @useRestifyPlugin("jsonBodyParser", opts)
     
     # Multipart Body Parser
     multipartBodyParser: (opts) ->
-        useRestifyPlugin("multipartBodyParser", opts)
+        @useRestifyPlugin("multipartBodyParser", opts)
 
     # Url Encoded Body Parser
     urlEncodedBodyParser: (opts) ->
-        useRestifyPlugin("urlEncodedBodyParser", opts)
+        @useRestifyPlugin("urlEncodedBodyParser", opts)
 
     # Conditional request
     conditionalRequest: (opts) ->
-        useRestifyPlugin("conditionalRequest", opts)
+        @useRestifyPlugin("conditionalRequest", opts)
 
-   
-    ########  API Internal Functions  ########
     
-    useRestifyPlugin = (plugin, options) ->
+    useRestifyPlugin: (plugin, options) ->
         options = options || { enabled: false }
         skipTLS = plugin == "gzipResponse"
-        if plugin in RESTIFY && options.enabled
+        if options.enabled
             @server("use", RESTIFY[plugin](options.settings), skipTLS)
 
+
+    ########  API Internal Functions  ########
+    
     # Response wrapper
     _response = (req, res, next, data) ->
         res.send({ response: data })
