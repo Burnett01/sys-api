@@ -1,6 +1,25 @@
 List of notable changes:
 ---
 
+## 06.01.2020
+
++ You may now use more Restify Bundled Plugins.
+
+New:
+
+```
+Audit Logger - api.auditLogger()
+Request Logger - api.requestLogger()
+Sanitize Path - api.sanitizePath()
+Serve Static - api.serveStatic()
+Full Response - api.fullResponse()
+JSON Body Parser - api.jsonBodyParser()
+Multipart Body Parser - api.multipartBodyParser()
+URL Encoded Body Parser - api.urlEncodedBodyParser()
+```
+
+[Check all bundled plugins here](https://github.com/Burnett01/sys-api#additional-restify-plugins)
+
 ## 04.05.2019
 
 + Dropped support for Node ``4`` and Node ``5``
