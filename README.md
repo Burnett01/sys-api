@@ -2,8 +2,7 @@
 
 A modular System-API framework for NodeJS - on top of RestifyJS.
 
-It is written in Coffeescript and compiled .js files are included.
-You don't need Coffeescript for it to function.
+It is written in Coffeescript and compiled to Javascript.
 
 [![Build Status](https://travis-ci.org/Burnett01/sys-api.svg?branch=master)](https://travis-ci.org/Burnett01/sys-api) [![npm version](https://badge.fury.io/js/sys-api.svg)](https://badge.fury.io/js/sys-api)
 
@@ -280,8 +279,16 @@ In addition to the BodyParser, the following plugins are available:
  * Request Expiry - ``api.requestExpiry()``
  * Throttle - ``api.throttle()``
  * Conditional Request - ``api.conditionalRequest()``
+ * Audit Logger - ``api.auditLogger()``
+ * Request Logger - ``api.requestLogger()``
+ * Sanitize Path - ``api.sanitizePath()``
+ * Serve Static - ``api.serveStatic()``
+ * Full Response - ``api.fullResponse()``
+ * JSON Body Parser - ``api.jsonBodyParser()``
+ * Multipart Body Parser - ``api.multipartBodyParser()``
+ * URL Encoded Body Parser - ``api.urlEncodedBodyParser()``
 
-Documentation: http://restify.com/#bundled-plugins
+Documentation: [Restify Bundled Plugins](https://github.com/restify/node-restify/blob/4.x/lib/plugins/index.js)
 
 ---
 
