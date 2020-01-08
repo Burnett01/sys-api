@@ -21,7 +21,7 @@
   THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
-  var API, Addons, BCRYPT, ClassHelper, MORGAN, PluginHelper, RESTIFY,
+  var API, Addons, BCRYPT, ClassHelper, MORGAN, PluginHelper, RESTIFY, Validation,
     splice = [].splice;
 
   RESTIFY = require('restify');
@@ -33,6 +33,8 @@
   ClassHelper = require('./ClassHelper');
 
   PluginHelper = require('./PluginHelper');
+
+  Validation = require('./lib/Validation-Engine');
 
   // Core-Addons definition
   Addons = ["./addons/Fs", "./addons/Os", "./addons/Net"];
@@ -178,6 +180,18 @@
       }
 
       
+      // Validation Engine
+      validator(opts) {
+        opts = opts || {
+          enabled: false
+        };
+        if (!opts.enabled) {
+          return;
+        }
+        delete opts.enabled;
+        return this.server("use", Validation(opts));
+      }
+
       // Cross-Origin Resource Sharing
       cors(opts) {
         return this.useRestifyPlugin("CORS", opts);
@@ -270,15 +284,21 @@
         return this.useRestifyPlugin("conditionalRequest", opts);
       }
 
-      useRestifyPlugin(plugin, options) {
+      useRestifyPlugin(plugin, opts) {
         var skipTLS;
-        options = options || {
+        opts = opts || {
           enabled: false
         };
-        skipTLS = plugin === "gzipResponse";
-        if (options.enabled) {
-          return this.server("use", RESTIFY[plugin](options.settings), skipTLS);
+        if (!opts.enabled) {
+          return;
         }
+        delete opts.enabled;
+        // Legacy support for .settings
+        if (opts.settings) {
+          opts = {...opts['settings']};
+        }
+        skipTLS = plugin === "gzipResponse";
+        return this.server("use", RESTIFY[plugin](opts), skipTLS);
       }
 
       

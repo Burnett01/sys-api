@@ -27,6 +27,7 @@ MORGAN  = require 'morgan'
 
 ClassHelper = require './ClassHelper'
 PluginHelper = require './PluginHelper'
+Validation = require './lib/Validation-Engine'
 
 # Core-Addons definition
 Addons = [
@@ -159,6 +160,13 @@ class API extends ClassHelper
                 )
         )
     
+    # Validation Engine
+    validator: (opts) ->
+        opts = opts || { enabled: false }
+        if !opts.enabled then return
+        delete opts.enabled
+        @server("use", Validation(opts))
+
     # Cross-Origin Resource Sharing
     cors: (opts) ->
         @useRestifyPlugin("CORS", opts)
@@ -232,11 +240,15 @@ class API extends ClassHelper
         @useRestifyPlugin("conditionalRequest", opts)
 
     
-    useRestifyPlugin: (plugin, options) ->
-        options = options || { enabled: false }
+    useRestifyPlugin: (plugin, opts) ->
+        opts = opts || { enabled: false }
+        if !opts.enabled then return
+        delete opts.enabled
+        # Legacy support for .settings
+        if opts.settings
+            opts = { ...opts['settings'] }
         skipTLS = plugin == "gzipResponse"
-        if options.enabled
-            @server("use", RESTIFY[plugin](options.settings), skipTLS)
+        @server("use", RESTIFY[plugin](opts), skipTLS)
 
 
     ########  API Internal Functions  ########
