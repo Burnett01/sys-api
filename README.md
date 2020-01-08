@@ -244,7 +244,7 @@ api.validator({
 
 To use custom validators simply issue:
 
-```
+```coffeescript
 api.validator({
     enabled: true,
     customValidators : {
@@ -255,7 +255,7 @@ api.validator({
 
 After enabling it, you may use the ``validate:`` property in your routes:
 
-```
+```coffeescript
 api.get({
     url: '/test',
     validate: { 
@@ -271,7 +271,7 @@ You can find the validation documentation [at this repository](https://github.co
 
 These are my additional features that the validator-engine supports:
 
-```
+```coffeescript
 + The validate property now allows an array of scope objects so
 that you can fully utilize ES6 spread features:
 
