@@ -32,6 +32,15 @@ var api = new API({
 
 var interAPI = API;
 
+const myValidator = arg => {}
+
+api.validator({
+    enabled: true,
+    customValidators: {
+        myValidator
+    }
+})
+
 function checkInter(inter) {
     expect(inter).to.have.property('fs');
     expect(inter.fs).to.be.a('object');
@@ -176,6 +185,8 @@ describe('Sys-API [api-instance] Tests', function() {
 
         expect(interAPI).to.have.property('auth');
         expect(interAPI.auth).to.be.a('function');
+        expect(interAPI).to.have.property('validator');
+        expect(interAPI.validator).to.be.a('function');
         expect(interAPI).to.have.property('cors');
         expect(interAPI.cors).to.be.a('function');
         expect(interAPI).to.have.property('bodyParser');
