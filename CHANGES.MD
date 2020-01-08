@@ -1,6 +1,132 @@
 List of notable changes:
 ---
 
+## 08.01.2020
+
++ Sys-API now supports validation out of the box.
+
+The validator is based on ``restify-validation-engine`` and
+instead of including ``restify-validation-engine`` as a dependency, <br />
+I copied the code and updated it to support new features:
+
+Simply enable the validator by using:
+
+```
+api.validator({
+    enabled: true
+})
+```
+
+To use custom validators simply issue:
+
+```
+api.validator({
+    enabled: true,
+    customValidators : {
+        ......
+    }
+})
+```
+
+After enabling it, you can use the ``validate:`` property in your routes:
+
+```
+api.get({
+    url: '/test',
+    validate: { 
+        params: { 
+            name: {
+                required: true
+            }
+        }
+    }}, r => r.send('Passed validation))
+```
+
+You can find the validation documentation [at this repository](https://github.com/paulvarache/restify-validation-engine)
+
+
+These are my additional features that the validator-engine supports:
+
+```
++ The validate property now allows an array of scope objects so
+that you can fully utilize ES6 spread features:
+
+const validators = {
+    name: {
+        required: true 
+    },
+    other: {
+        .....
+    }
+}
+
+api.get({
+    url: '/test',
+    validate: [ 
+        { body: { ...validators }},
+        { params: { ...... } }
+    ]}, r => {
+        r.next
+        r.send
+        r.req
+        r.res
+    })
+
++ The req object is now forwarded to custom validators.
+This allows you to use custom validation functions as middleware.
+
+const myValidator = (name, req) => {
+    // do something with req
+    // ....
+    // check for valid name
+    return (name == 'cool')
+}
+
+api.validator({
+    enabled: true,
+    customValidators: {
+        myValidator
+    }
+})
+
+api.get({
+    url: '/test',
+    validate: { 
+        params: { 
+            name: {
+                required: true,
+                myValidator: 'Invalid name'
+            }
+        }
+    }}, r => r.send('Passed validation))
+```
+
++ We merged the ``.settings:`` key for bundled plugin configs to the top-level:
+
+In previous versions you would configure a bundled plugin like:
+
+```
+api.bodyParser({
+    enabled: true,
+    settings: {
+        .....
+    }
+})
+```
+
+This is no longer needed. Simply pass the configuration directly:
+
+```
+api.bodyParser({
+    enabled: true,
+    .....
+})
+```
+
+To keep backward-compatibility, your api can continue using the ``.settings:`` key
+but we recommend updating your code.
+
+
 ## 06.01.2020
 
 + You may now use more Restify Bundled Plugins.
