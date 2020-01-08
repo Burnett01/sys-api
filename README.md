@@ -236,7 +236,7 @@ I copied the code and updated it to support new features:
 
 Simply enable the validator by using:
 
-```
+```coffeescript
 api.validator({
     enabled: true
 })
