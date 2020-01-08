@@ -13,6 +13,9 @@ It is written in Coffeescript and compiled to Javascript.
 + Authorization (optional bcrypt, anonymous)
 + CORS (Cross-Origin Resource Sharing)
 + HTTP/S (TLS)
++ Validation Engine
++ Body Parsers (JSON, URL, Multipart)
++ JSON Body Parser
 + Body Parser
 + Accept Parser
 + Date Parser
@@ -22,10 +25,13 @@ It is written in Coffeescript and compiled to Javascript.
 + Request Expiry
 + Throttle
 + Conditional Request
++ Audit Logger
++ Sanitize Path
++ Serve Static
 + Extensive Routing
 + Logging (morgan/custom)
-+ Plugins (extend your api)
-+ Addons (extend sys-api' core)
++ Plugins (extend your api instance)
++ Addons (extend sys-api's core)
 
 ---
 
@@ -37,6 +43,7 @@ It is written in Coffeescript and compiled to Javascript.
     * [Anonymous access](#anonymous-access)
 * [CORS (Cross-Origin Resource Sharing)](#cors-cross-origin-resource-sharing)
 * [HTTP/S - TLS](#https---tls)
+* [Validation](#validation)
 * [BodyParser](#bodyparser)
 * [Additional Restify plugins](#additional-restify-plugins)
 * [Plugins](#plugins)
@@ -186,11 +193,9 @@ api.auth({
 ```coffeescript
 api.cors({
     enabled: true,
-    settings: {
-        origins: ['https://foo.com', 'http://bar.com'],  # defaults to ['*']
-        credentials: true,  # defaults to false
-        headers: ['x-foo']  # sets expose-headers
-    }
+    origins: ['https://foo.com', 'http://bar.com'],  # defaults to ['*']
+    credentials: true,  # defaults to false
+    headers: ['x-foo']  # sets expose-headers
 })
 ```
 
@@ -223,6 +228,105 @@ api.listen(80, 8443) #API is going to listen on port HTTP(80) and HTTPS(8443)
 
 ---
 
+### Validation
+
+The validator is based on ``restify-validation-engine`` and
+instead of including ``restify-validation-engine`` as a dependency, <br>
+I copied the code and updated it to support new features:
+
+Simply enable the validator by using:
+
+```
+api.validator({
+    enabled: true
+})
+```
+
+To use custom validators simply issue:
+
+```
+api.validator({
+    enabled: true,
+    customValidators : {
+        ......
+    }
+})
+```
+
+After enabling it, you may use the ``validate:`` property in your routes:
+
+```
+api.get({
+    url: '/test',
+    validate: { 
+        params: { 
+            name: {
+                required: true
+            }
+        }
+    }}, r => r.send('Passed validation))
+```
+
+You can find the validation documentation [at this repository](https://github.com/paulvarache/restify-validation-engine)
+
+These are my additional features that the validator-engine supports:
+
+```
++ The validate property now allows an array of scope objects so
+that you can fully utilize ES6 spread features:
+
+const validators = {
+    name: {
+        required: true 
+    },
+    other: {
+        .....
+    }
+}
+
+api.get({
+    url: '/test',
+    validate: [ 
+        { body: { ...validators }},
+        { params: { ...... } }
+    ]}, r => {
+        r.next
+        r.send
+        r.req
+        r.res
+    })
+
++ The req object is now forwarded to custom validators.
+This allows you to use custom validation functions as middleware.
+
+const myValidator = (name, req) => {
+    // do something with req
+    // ....
+    // check for valid name
+    return (name == 'cool')
+}
+
+api.validator({
+    enabled: true,
+    customValidators: {
+        myValidator
+    }
+})
+
+api.get({
+    url: '/test',
+    validate: { 
+        params: { 
+            name: {
+                required: true,
+                myValidator: 'Invalid name'
+            }
+        }
+    }}, r => r.send('Passed validation))
+```
+
+---
+
 ### BodyParser
 
 The BodyParser can be enabled with a single option.
@@ -237,31 +341,29 @@ api.bodyParser({
 })
 ```
 
-If you want to change more settings, simply pass an object:
+If you want to change more settings:
 
 ```coffeescript
 api.bodyParser({
     enabled: true,
-    settings: {
-        maxBodySize: 0,
-        mapParams: true,
-        mapFiles: false,
-        overrideParams: false,
-        multipartHandler: function(part) {
-            part.on('data', function(data) {
-                # do something with the multipart data
-            });
-        },
-        multipartFileHandler: function(part) {
-            part.on('data', function(data) {
-                #do something with the multipart file data
-            });
-        },
-        keepExtensions: false,
-        uploadDir: os.tmpdir(),
-        multiples: true
-        hash: 'sha1'
-    }
+    maxBodySize: 0,
+    mapParams: true,
+    mapFiles: false,
+    overrideParams: false,
+    multipartHandler: function(part) {
+        part.on('data', function(data) {
+            # do something with the multipart data
+        });
+    },
+    multipartFileHandler: function(part) {
+        part.on('data', function(data) {
+            #do something with the multipart file data
+        });
+    },
+    keepExtensions: false,
+    uploadDir: os.tmpdir(),
+    multiples: true
+    hash: 'sha1'
 })
 ```
 
