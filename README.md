@@ -443,11 +443,11 @@ Javascript:   https://github.com/Burnett01/sys-api/blob/master/examples/example.
 
 ## How to install:
 
-Just use `npm install sys-api` and use the content of the demo-file. 
+Just use `npm install @burnett01/sys-api` and use the content of the demo-file. 
 
 #### Support
 
-If you experience any problems try using `npm install sys-api --no-bin-links`
+If you experience any problems try using `npm install @burnett01/sys-api --no-bin-links`
 
 ---
 
