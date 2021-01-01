@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2015-2020, PlatypusMeister (Paul Varache)
- * Copyright (c) 2020, Burnett01 (Steven Agyekum)
+ * Copyright (c) 2015-2021, PlatypusMeister (Paul Varache)
+ * Copyright (c) 2020-2021, Burnett01 (Steven Agyekum)
  * 
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, 
