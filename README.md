@@ -4,7 +4,7 @@ A modular System-API framework for NodeJS - on top of RestifyJS.
 
 It is written in Coffeescript and compiled to Javascript.
 
-[![Build Status](https://travis-ci.org/Burnett01/sys-api.svg?branch=master)](https://travis-ci.org/Burnett01/sys-api) [![npm version](https://badge.fury.io/js/%40burnett01%2Fsys-api.svg)](https://badge.fury.io/js/%40burnett01%2Fsys-api)
+[![Build Status](https://travis-ci.com/Burnett01/sys-api.svg?branch=master)](https://travis-ci.com/Burnett01/sys-api) [![npm version](https://badge.fury.io/js/%40burnett01%2Fsys-api.svg)](https://badge.fury.io/js/%40burnett01%2Fsys-api)
 
 ---
 
